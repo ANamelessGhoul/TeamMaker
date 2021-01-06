@@ -56,7 +56,7 @@ if __name__ == "__main__":
   #mydb.commit()
   jam = models.GameJam(mycursor.fetchone())
   #for (id, name, desc, primary, secondary, Experience) in mycursor:
-  print('{}: {} - {} -> {}'.format(jam.id, jam.name, jam.startDate, jam.endDate))
+  print('{}: {} - {} -> {} = {}'.format(jam.id, jam.name, jam.startDate, jam.endDate, jam.endDate - jam.startDate))
 
   mycursor.close()
   mydb.close()
