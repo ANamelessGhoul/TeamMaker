@@ -40,9 +40,14 @@ if __name__ == "__main__":
 
 
   db = Database()
-  active_jams = db.GetActiveGameJams()
-  for jam in active_jams:
-    print('{}: {} - {} -> {} = {}'.format(jam.id, jam.name, jam.startDate, jam.endDate, jam.endDate - jam.startDate))
+  active_jams = db.GetUpcomingGameJams()
+  if(len(active_jams) == 0):
+    print('No upcoming jams')
+  else:
+    for jam in active_jams:
+      print('{}: {} - {} -> {} = {}'.format(jam.id, jam.name, jam.startDate, jam.endDate, jam.endDate - jam.startDate))
+
+
 
   del db
 

@@ -20,13 +20,30 @@ class Database:
         self.mydb.close()
 
 
-    def GetActiveGameJams(self):
+    def GetUpcomingGameJams(self):
         """
-        Gets all current game jams
+        Returns an array of all game jams where current timestamp is less than start date of game jam
         """
 
         mycursor = self.mydb.cursor()
-        mycursor.execute("SELECT * FROM GameJams WHERE startDate < CURRENT_TIMESTAMP()")
+        mycursor.execute("SELECT * FROM GameJams WHERE startDate > CURRENT_TIMESTAMP()")
+        
+        upcoming_jams = []
+        row = mycursor.fetchone()
+        while row is not None:
+            upcoming_jams.append(models.GameJam(row))
+            row = mycursor.fetchone()
+        
+        mycursor.close()
+        return upcoming_jams
+
+    def GetActiveGameJams(self, parameter_list):
+        """
+        Returns an array of all game jams where current timestamp is within start and end date of game jam
+        """
+        
+        mycursor = self.mydb.cursor()
+        mycursor.execute("SELECT * FROM GameJams WHERE startDate < CURRENT_TIMESTAMP() AND endDate > CURRENT_TIMESTAMP()")
         
         active_jams = []
         row = mycursor.fetchone()
