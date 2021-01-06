@@ -1,29 +1,38 @@
-from movie import Movie
+# Decouple allows for local environment variables
+from decouple import config
+import mysql.connector
+
+import models
 
 class Database:
     def __init__(self):
-        self.movies = {}
-        self._last_movie_key = 0
+        # Set up sql connection
+        # TODO: Replace with real connection
+        self.mydb = mysql.connector.connect(
+            host=config('SQL_HOST'),
+            user=config('SQL_USER'),
+            password=config('SQL_PASSWORD'),
+            database=config('SQL_DATABASE')
+        )
 
-    def add_movie(self, movie):
-        self._last_movie_key += 1
-        self.movies[self._last_movie_key] = movie
-        return self._last_movie_key
 
-    def delete_movie(self, movie_key):
-        if movie_key in self.movies:
-            del self.movies[movie_key]
+    def __del__(self):
+        self.mydb.close()
 
-    def get_movie(self, movie_key):
-        movie = self.movies.get(movie_key)
-        if movie is None:
-            return None
-        movie_ = Movie(movie.title, year = movie.year)
-        return movie_
 
-    def get_movies(self):
-        movies = []
-        for movie_key, movie in self.movies.items():
-            movie_ = Movie(movie.title, year = movie.year)
-            movies.append({movie_key, movie_}) 
-        return movies
+    def GetActiveGameJams(self):
+        """
+        Gets all current game jams
+        """
+
+        mycursor = self.mydb.cursor()
+        mycursor.execute("SELECT * FROM GameJams WHERE startDate < CURRENT_TIMESTAMP()")
+        
+        active_jams = []
+        row = mycursor.fetchone()
+        while row is not None:
+            active_jams.append(models.GameJam(row))
+            row = mycursor.fetchone()
+        
+        mycursor.close()
+        return active_jams

@@ -2,11 +2,8 @@
 from flask import Flask, render_template
 from flask_login import LoginManager
 
-# Decouple allows for local environment variables
-from decouple import config
 
 from datetime import datetime
-import mysql.connector
 
 import view
 from database import Database
@@ -40,26 +37,15 @@ def create_app():
 
 
 if __name__ == "__main__":
-  # Set up sql connection
-  # TODO: Replace with real connection
-  mydb = mysql.connector.connect(
-    host=config('SQL_HOST'),
-    user=config('SQL_USER'),
-    password=config('SQL_PASSWORD'),
-    database=config('SQL_DATABASE')
-  )
 
-  mycursor = mydb.cursor()
-  sql = "SELECT * FROM GameJams WHERE id = 1"
-  # val = ("John", "Highway 21")
-  mycursor.execute(sql)
-  #mydb.commit()
-  jam = models.GameJam(mycursor.fetchone())
-  #for (id, name, desc, primary, secondary, Experience) in mycursor:
-  print('{}: {} - {} -> {} = {}'.format(jam.id, jam.name, jam.startDate, jam.endDate, jam.endDate - jam.startDate))
 
-  mycursor.close()
-  mydb.close()
+  db = Database()
+  active_jams = db.GetActiveGameJams()
+  for jam in active_jams:
+    print('{}: {} - {} -> {} = {}'.format(jam.id, jam.name, jam.startDate, jam.endDate, jam.endDate - jam.startDate))
+
+  del db
+
 
   # print(mycursor.rowcount, "users found.")
   # app = create_app()
