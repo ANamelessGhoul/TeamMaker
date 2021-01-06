@@ -3,6 +3,7 @@
 - [ ] Login sessions
 - [ ] 3rd party signup
 - [ ] Create more todo items :)
+- [X] Get sensitive login info out of repository 
 
 # Game Jam Team Maker
 
