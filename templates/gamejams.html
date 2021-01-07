@@ -1,34 +1,46 @@
 {% extends "layout.html" %}
-{% block title %} GameJams {% endblock %}
+{% block title %} Game Jams {% endblock %}
 {% block content %} 
-    <h1 class = "title">GameJams</h1>
-    {% if gamejams %}
-    <form action="" method="post" name="movie_list">
-        <table class = "table is-striped is-fullwidth">
-            {% for jam in gamejams %}
-            <tr>
-                <td>
-                    <label class="checkbox">
-                        <input type="checkbox" name="movie_keys" value="{{ jam.id }}"/>
-                    </label>
-                    <a href="">
-                    </a>
-                </td>
-                <td>{{ jam.name }}</td>
-                <td>{{ jam.theme }}</td>
-                <td>{{ jam.startDate }}</td>
-                <td>{{ jam.endDate }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+    <div class = "column is-8 is-offset-2">
+        <h1 class = "title">Game Jams</h1>
+        {% if gamejams %}
+        <form action="" method="post" name="movie_list">
+            <table class = "table is-striped is-bordered">
+                <thead>
+                    <th>Name</th>
+                    <th>Theme</th>
+                    <th>StartDate</th>
+                    <th>EndDate</th>
+                    <th>Duration</th>
+                </thead>
+                <tbody>
+                    {% for jam in gamejams %}
+                    <tr>
+                        <!-- <td>
+                            <label class="checkbox">
+                                <input type="checkbox" name="jam_ids" value="{{ jam.id }}"/>
+                            </label>
+                            <a href="">
+                            </a>
+                        </td> -->
+                        <td>{{ jam.name }}</td>
+                        <td>{{ jam.theme }}</td>
+                        <td>{{ jam.startDate }}</td>
+                        <td>{{ jam.endDate }}</td>
+                        <td>{{ jam.endDate - jam.startDate}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
 
 
-        <div class="field is-grouped">
-            <div class="control">
-              <button class="button is-danger is-small">Delete</button>
+            <div class="field is-grouped">
+                <div class="control">
+                <button class="button is-danger is-small">Delete</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 
     {% endif %}
 {% endblock %}

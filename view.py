@@ -3,6 +3,7 @@ from datetime import datetime
 from movie import Movie
 
 from database import Database
+import operator
 
 def image_server(filename):
     return send_from_directory("./images", filename)
@@ -13,14 +14,14 @@ def home_page():
     return render_template("home.html", day = day_name)
 
 def gamejams_page():
-    database = Database.getInstance()
     if request.method == "GET":
+        database = Database.getInstance()
         gamejams = database.GetAllGameJams()
-        return render_template("gamejams.html", gamejams = gamejams)
+        return render_template("gamejams.html", gamejams = sorted(gamejams, key=lambda x: x.startDate, reverse=True))
     else:
-        form_movie_keys = request.form.getlist("movie_keys")
-        #for form_movie_key in form_movie_keys:
-        #    db.delete_movie(int(form_movie_key))
+        form_jam_ids = request.form.getlist("jam_ids")
+        for id in form_jam_ids:
+            print(id)
         return redirect(url_for("gamejams_page"))
 
 def movie_page(movie_key):
