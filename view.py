@@ -113,3 +113,36 @@ def validate_signup_form(form):
         form.data["name"] = form_name
 
     return len(form.errors) == 0
+
+def login_page():
+    if request.method == "GET":
+        values = { "data": {"name": "", "password": ""}}
+        return render_template(
+            "login.html", 
+            values = values
+        )
+    else:
+        valid = validate_signup_form(request.form)
+        if not valid:
+            return render_template(
+                "login.html",
+                values=request.form,
+            )
+        # title = request.form.data["title"]
+        # year = request.form.data["year"]
+        # movie = Movie(title, year=year)
+        # db = current_app.config["db"]
+        # movie_key = db.add_movie(movie)
+        return redirect(url_for("home_page"))
+
+def validate_login_form(form):
+    form.data = {}
+    form.errors = {}
+
+    form_name = form.get("name", "").strip()
+    if len(form_name) == 0:
+        form.errors["name"] = "Name can not be blank."
+    else:
+        form.data["name"] = form_name
+
+    return len(form.errors) == 0
