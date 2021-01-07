@@ -1,20 +1,23 @@
 {% extends "layout.html" %}
-{% block title %} Movies {% endblock %}
+{% block title %} GameJams {% endblock %}
 {% block content %} 
-    <h1 class = "title">Movie List</h1>
-    {% if movies %}
+    <h1 class = "title">GameJams</h1>
+    {% if gamejams %}
     <form action="" method="post" name="movie_list">
         <table class = "table is-striped is-fullwidth">
-            {% for movie_key, movie in movies %}
+            {% for jam in gamejams %}
             <tr>
                 <td>
                     <label class="checkbox">
-                        <input type="checkbox" name="movie_keys" value="{{ movie_key }}"/>
+                        <input type="checkbox" name="movie_keys" value="{{ jam.id }}"/>
                     </label>
-                    <a href="{{ url_for('movie_page', movie_key = movie_key) }}">{{ movie.title }}
-                    {% if movie.year %}({{movie.year}}){% endif %}
+                    <a href="">
                     </a>
                 </td>
+                <td>{{ jam.name }}</td>
+                <td>{{ jam.theme }}</td>
+                <td>{{ jam.startDate }}</td>
+                <td>{{ jam.endDate }}</td>
             </tr>
             {% endfor %}
         </table>

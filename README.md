@@ -4,7 +4,8 @@
 - [ ] 3rd party signup
 - [ ] Create more todo items :)
 - [X] Get sensitive login info out of repository 
-- [ ] Database access
+- [X] Database access
+- [X] Display database data
 
 # Game Jam Team Maker
 

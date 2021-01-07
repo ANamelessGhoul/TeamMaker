@@ -2,6 +2,8 @@ from flask import Flask, render_template, current_app, abort, request, redirect,
 from datetime import datetime
 from movie import Movie
 
+from database import Database
+
 def image_server(filename):
     return send_from_directory("./images", filename)
 
@@ -10,16 +12,16 @@ def home_page():
     day_name = today.strftime("%A")
     return render_template("home.html", day = day_name)
 
-def movies_page():
-    db = current_app.config["db"]
+def gamejams_page():
+    database = Database.getInstance()
     if request.method == "GET":
-        movies = db.get_movies()
-        return render_template("movies.html", movies = sorted(movies))
+        gamejams = database.GetAllGameJams()
+        return render_template("gamejams.html", gamejams = gamejams)
     else:
         form_movie_keys = request.form.getlist("movie_keys")
-        for form_movie_key in form_movie_keys:
-            db.delete_movie(int(form_movie_key))
-        return redirect(url_for("movies_page"))
+        #for form_movie_key in form_movie_keys:
+        #    db.delete_movie(int(form_movie_key))
+        return redirect(url_for("gamejams_page"))
 
 def movie_page(movie_key):
     db = current_app.config["db"]
