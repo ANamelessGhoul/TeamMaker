@@ -1,5 +1,6 @@
 from flask import Flask, render_template, current_app, abort, request, redirect, url_for,  send_from_directory
-from flask_login import login_required, logout_user
+from flask_login import login_required, logout_user, login_user
+from login import load_user
 from datetime import datetime
 from movie import Movie
 
@@ -123,12 +124,17 @@ def login_page():
             values = values
         )
     else:
-        valid = validate_signup_form(request.form)
+        valid = validate_login_form(request.form)
         if not valid:
             return render_template(
                 "login.html",
                 values=request.form,
             )
+        else:
+            user = load_user(request.form.data["name"])
+            if user is not None:        
+                login_user(user)
+                print('Logged in')
         # title = request.form.data["title"]
         # year = request.form.data["year"]
         # movie = Movie(title, year=year)
@@ -147,3 +153,8 @@ def validate_login_form(form):
         form.data["name"] = form_name
 
     return len(form.errors) == 0
+
+@login_required
+def logout_page():
+    logout_user()
+    return redirect(url_for("home_page"))

@@ -8,14 +8,20 @@ class User_Login:
     """
     def __init__(self, user_id):
         self.data = Database.getInstance().GetUser(user_id)
+    @property
     def is_authenticated(self):
-        return True
+        return self.data is not None
+    @property
     def is_active(self):
         return True
+    @property
     def is_anonymous(self):
         return False
     def get_id(self):
-        return str(self.id)
+        if self.data is None:
+            return None
+        
+        return str(self.data.id)
         
 
 def load_user(user_id):

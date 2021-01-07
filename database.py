@@ -91,7 +91,10 @@ class Database:
         
         user = mycursor.fetchone()
         mycursor.close()
-        return user
+        if user is not None:
+            return models.User(user)
+        else:
+            return None
         
 
 
