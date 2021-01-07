@@ -80,6 +80,19 @@ class Database:
         Returns an array of all game jams where current timestamp is greater than end date of game jam
         """
         return self._GetGameJams("Past")
+    
+    def GetUser(self, id):
+        """
+        Returns user with id from database
+        """
+
+        mycursor = self.mydb.cursor()
+        mycursor.execute("SELECT * FROM Users WHERE id = %s", (id,))
+        
+        user = mycursor.fetchone()
+        mycursor.close()
+        return user
+        
 
 
 

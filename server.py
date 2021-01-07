@@ -1,6 +1,7 @@
 # https://web.itu.edu.tr/uyar/fad/application-structure.html
 from flask import Flask, render_template
 from flask_login import LoginManager, login_user, login_required, logout_user
+from decouple import config
 
 
 from datetime import datetime
@@ -15,6 +16,9 @@ import login
 def create_app():
     # Configure flask app
     app = Flask(__name__)
+
+    app.secret_key = config('SECRET_KEY')
+
     app.add_url_rule("/", view_func = view.home_page)
     app.add_url_rule("/gamejams", view_func = view.gamejams_page, methods=["GET", "POST"])
     app.add_url_rule("/movies/<int:movie_key>", view_func = view.movie_page)
@@ -30,6 +34,9 @@ def create_app():
     login_manager = LoginManager(app)
     login_manager.init_app(app)
     login_manager.user_loader(login.load_user)
+    login_manager.login_view = "login_page"
+
+
 
     # Get Settings
     app.config.from_object("settings")

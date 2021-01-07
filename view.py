@@ -14,6 +14,7 @@ def home_page():
     day_name = today.strftime("%A")
     return render_template("home.html", day = day_name)
 
+#@login_required
 def gamejams_page():
     if request.method == "GET":
         database = Database.getInstance()
