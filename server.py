@@ -1,6 +1,6 @@
 # https://web.itu.edu.tr/uyar/fad/application-structure.html
 from flask import Flask, render_template
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user, login_required, logout_user
 
 
 from datetime import datetime
@@ -8,6 +8,8 @@ from datetime import datetime
 import view
 from database import Database
 from movie import Movie
+
+import login
 
 
 def create_app():
@@ -24,8 +26,9 @@ def create_app():
     database = Database.getInstance()
 
     # Configure flask login
-    # login = LoginManager(app)
-    # login.init_app(app)
+    login_manager = LoginManager(app)
+    login_manager.init_app(app)
+    login_manager.user_loader(login.load_user)
 
     # Get Settings
     app.config.from_object("settings")
@@ -36,4 +39,5 @@ if __name__ == "__main__":
 
     app = create_app()
     app.run(host = "0.0.0.0", port = 8080)
+
 

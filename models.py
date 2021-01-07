@@ -6,6 +6,8 @@ class User:
         self.primary_specialization = row[2]
         self.secondary_specializations = row[3]
         self.experience = row[4]
+    
+    
 
 class GameJam:
     def __init__(self, row):

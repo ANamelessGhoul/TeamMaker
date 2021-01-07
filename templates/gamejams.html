@@ -4,7 +4,7 @@
     <div class = "column is-8 is-offset-2">
         <h1 class = "title">Game Jams</h1>
         {% if gamejams %}
-        <form action="" method="post" name="movie_list">
+        <form action="" method="post" name="jam_list">
             <table class = "table is-striped is-bordered">
                 <thead>
                     <th>Name</th>
@@ -32,13 +32,6 @@
                     {% endfor %}
                 </tbody>
             </table>
-
-
-            <div class="field is-grouped">
-                <div class="control">
-                <button class="button is-danger is-small">Delete</button>
-                </div>
-            </div>
         </form>
     </div>
 

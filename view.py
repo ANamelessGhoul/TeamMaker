@@ -1,4 +1,5 @@
 from flask import Flask, render_template, current_app, abort, request, redirect, url_for,  send_from_directory
+from flask_login import login_required, logout_user
 from datetime import datetime
 from movie import Movie
 
