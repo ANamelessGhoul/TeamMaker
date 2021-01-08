@@ -2,10 +2,11 @@
 class User:
     def __init__(self, row):
         self.id = row[0]
-        self.name = row[1]
-        self.primary_specialization = row[2]
-        self.secondary_specializations = row[3]
-        self.experience = row[4]
+        self.email = row[1]
+        self.name = row[2]
+        self.primary_specialization = row[3]
+        self.secondary_specializations = row[4]
+        self.experience = row[5]
     
     
 

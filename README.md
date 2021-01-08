@@ -6,7 +6,7 @@
 - [X] Get sensitive login info out of repository 
 - [X] Database access
 - [X] Display database data
-- [ ] Sign up page
+- [X] Sign up page
 - [ ] Sign up database setup
 - [ ] Login authentication
 - [ ] Account set up
@@ -17,7 +17,7 @@
 
 # Database TODO:
 - [ ] Add username column to user
-- [ ] Add password table
+- [X] Add password to user table
 
 # Game Jam Team Maker
 

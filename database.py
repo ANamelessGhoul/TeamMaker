@@ -1,6 +1,7 @@
 # Decouple allows for local environment variables
 from decouple import config
 import mysql.connector
+import bcrypt
 
 import models
 
@@ -44,7 +45,7 @@ class Database:
         """
         Internal function to handle reading multiple rows of Game Jams depending on time
         """
-
+        self.mydb.commit()
         mycursor = self.mydb.cursor()
         mycursor.execute(self.times_dict[time])
         
@@ -81,21 +82,34 @@ class Database:
         """
         return self._GetGameJams("Past")
     
-    def GetUser(self, id):
+    def GetUser(self, value, field = 'id'):
         """
         Returns user with id from database
         """
-
+        self.mydb.commit()
         mycursor = self.mydb.cursor()
-        mycursor.execute("SELECT * FROM Users WHERE id = %s", (id,))
-        
+        mycursor.execute("SELECT * FROM Users WHERE {} = %(value)s".format(field), {'value': value})
+
         user = mycursor.fetchone()
         mycursor.close()
+
         if user is not None:
             return models.User(user)
         else:
             return None
+    
+    def ValidatePassword(self, email, password):
+        """
+        Checks database to see if given email has corresponding password
+        """
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+        mycursor.execute("SELECT password FROM Users WHERE email = %s", (email,))
         
+        password_hash = mycursor.fetchone()
+        mycursor.close()
+
+        return bcrypt.checkpw(bytes(password, encoding="utf-8"), bytes(password_hash[0], encoding="utf-8"))
 
 
 

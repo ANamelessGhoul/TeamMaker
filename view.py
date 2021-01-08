@@ -1,6 +1,8 @@
 from flask import Flask, render_template, current_app, abort, request, redirect, url_for,  send_from_directory
 from flask_login import login_required, logout_user, login_user
 from login import load_user
+import bcrypt
+
 from datetime import datetime
 from movie import Movie
 
@@ -144,7 +146,7 @@ def validate_signup_form(form):
     # validate password
     password = form.get("password", "")
     if len(password) == 0:
-        form.errors["password"] = "Email can not be blank."
+        form.errors["password"] = "Password can not be blank."
     elif False:
         # TODO:validate password
         pass
@@ -169,29 +171,36 @@ def login_page():
                 "login.html",
                 values=request.form,
             )
-        # TODO: validation
-        user = load_user(request.form.data["password"])
-        if user is not None:        
-            login_user(user)
-            print('Logged in')
+        login_user(load_user(request.form.data["user"].id))
         return redirect(url_for("home_page"))
 
 def validate_login_form(form):
     form.data = {}
     form.errors = {}
 
-    form_name = form.get("email", "").strip()
-    if len(form_name) == 0:
+    email = form.get("email", "").strip()
+    if len(email) == 0:
         form.errors["email"] = "Email can not be blank."
-    else:
-        form.data["email"] = form_name
+        return False
+
+    user = Database.getInstance().GetUser(email, field = 'email')
+    form.data["user"] = user
+    if user is None :
+        form.data["email"] = email
+        form.errors["email"] = "Email is not registered"
+        return False
+    
+    form.data["email"] = email
 
     password = form.get("password", "")
-    if len(form_name) == 0:
+    if len(password) == 0:
         form.errors["password"] = "Password can not be blank"
-    else:
-        form.data["password"] = password
-
+        return False
+    if not Database.getInstance().ValidatePassword(email, password):
+        form.errors["password"] = "Password is incorrect"
+        return False
+    
+    form.data["password"] = password
 
     return len(form.errors) == 0
 
