@@ -1,13 +1,13 @@
 {% macro required_text_field(values, name, type = 'text', label = name) %}
     <div class="field">
-      <label for="{{name}}" class="label">{{label|capitalize}}</label>
-      <div class="control ">
-        <input type="{{type}}" name="{{name}}" class="input {{'is-danger' if name in values.errors}}" required="required" placeholder="Choose username" value="{{ values.data[name] }}"/>
-      </div>
-      {% if name in values.errors %}
-      <p class="help is-danger">
-        {{ values.errors[name] }}
-      </p>
-      {% endif %}
+        <label for="{{name}}" class="label">{{label|capitalize}}</label>
+        <div class="control ">
+            <input type="{{type}}" name="{{name}}" class="input {{'is-danger' if name in values.errors}}" required="required" placeholder="Choose username" value="{{ values.data[name] }}"/>
+        </div>
+        {% if name in values.errors %}
+        <p class="help is-danger">
+            {{ values.errors[name] }}
+        </p>
+        {% endif %}
     </div>
 {% endmacro %}
