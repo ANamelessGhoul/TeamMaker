@@ -13,7 +13,10 @@
 - [ ] Create Game Jam
 - [ ] Attend Game Jam
 - [ ] Display Current Game Jams attending
-- [ ] 
+
+# Database TODO:
+- [ ] Add username column to user
+- [ ] Add password table
 
 # Game Jam Team Maker
 

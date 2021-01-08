@@ -114,6 +114,12 @@ def validate_signup_form(form):
     else:
         form.data["name"] = form_name
 
+    form_first = form.get("lastname", "").strip()
+    if len(form_first) == 0:
+        form.errors["lastname"] = "Last Name can not be blank."
+    else:
+        form.data["lastname"] = form_first
+
     return len(form.errors) == 0
 
 def login_page():
@@ -151,6 +157,8 @@ def validate_login_form(form):
         form.errors["name"] = "Name can not be blank."
     else:
         form.data["name"] = form_name
+
+
 
     return len(form.errors) == 0
 

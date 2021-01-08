@@ -1,40 +1,21 @@
 {% extends "layout.html" %}
+{% import "macros.html" as macros %}
 {% block title %}Sign up{% endblock %}
 {% block content %}
 
 <div class="column is-4 is-offset-4">
-    <h1 class="title">Sign up</h1>
+  <h1 class="title">Sign up</h1>
 
-    <form action="" method="post" name="movie_edit">
-    <div class="field">
-        <label for="name" class="label">Name</label>
-        <div class="control">
-        <input type="text" name="name" class="input" required="required" value="{{ values.data['name'] }}"/>
-        </div>
-        {% if 'name' in values.errors %}
-        <p class="help has-background-warning">
-            {{ values.errors['name'] }}
-        </p>
-        {% endif %}
-    </div>
-
-    <div class="field">
-        <label for="password" class="label">Password</label>
-        <div class="control">
-        <input type="password" name="password" class="input" value="{{ values.data['password'] }}"/>
-        </div>
-        {% if 'password' in values.errors %}
-        <p class="help has-background-warning">
-            {{ values.errors['password'] }}
-        </p>
-        {% endif %}
-    </div>
+  <form action="" method="post" name="movie_edit"> 
+    {{ macros.required_text_field(values, 'name', label = 'First Name')}}
+    {{ macros.required_text_field(values, 'lastname', label = 'Last Name')}}
+    {{ macros.required_text_field(values, 'password', type='password')}}
 
     <div class="field is-grouped">
-        <div class="control">
-        <button class="button is-primary is-small">Sign up</button>
-        </div>
+      <div class="control">
+      <button class="button is-primary">Sign up</button>
+      </div>
     </div>
-    </form>
+  </form>
 </div>
 {% endblock %}
