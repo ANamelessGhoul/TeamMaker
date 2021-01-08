@@ -6,6 +6,14 @@
 - [X] Get sensitive login info out of repository 
 - [X] Database access
 - [X] Display database data
+- [ ] Sign up
+- [ ] Login authentication
+- [ ] Account set up
+- [ ] Show profile
+- [ ] Create Game Jam
+- [ ] Attend Game Jam
+- [ ] Display Current Game Jams attending
+- [ ] 
 
 # Game Jam Team Maker
 
