@@ -97,6 +97,11 @@ def signup_page():
                 "signup.html",
                 values=request.form,
             )
+        print(request.form.data["firstname"])
+        print(request.form.data["lastname"])
+        print(request.form.data["email"])
+        print(request.form.data["password"])
+        print(request.form.data["about"])
         # title = request.form.data["title"]
         # year = request.form.data["year"]
         # movie = Movie(title, year=year)
@@ -108,17 +113,45 @@ def validate_signup_form(form):
     form.data = {}
     form.errors = {}
 
-    form_name = form.get("name", "").strip()
-    if len(form_name) == 0:
-        form.errors["name"] = "Title can not be blank."
+    # validate first name
+    first_name = form.get("firstname", "").strip()
+    if len(first_name) == 0:
+        form.errors["firstname"] = "First name can not be blank."
+    elif len(first_name) > 127:
+        form.errors["firstname"] = "First name is too long."
     else:
-        form.data["name"] = form_name
+        form.data["firstname"] = first_name
 
-    form_first = form.get("lastname", "").strip()
-    if len(form_first) == 0:
-        form.errors["lastname"] = "Last Name can not be blank."
+    # validate last name
+    last_name = form.get("lastname", "").strip()
+    if len(last_name) == 0:
+        form.errors["lastname"] = "Last name can not be blank."
+    elif len(last_name) > 127:
+        form.errors["lastname"] = "Last name is too long."
     else:
-        form.data["lastname"] = form_first
+        form.data["lastname"] = last_name
+
+    # validate email
+    email = form.get("email", "").strip()
+    if len(email) == 0:
+        form.errors["email"] = "Email can not be blank."
+    elif False:
+        # TODO:Check database for email
+        pass
+    else:
+        form.data["email"] = email
+
+    # validate password
+    password = form.get("password", "")
+    if len(password) == 0:
+        form.errors["password"] = "Email can not be blank."
+    elif False:
+        # TODO:validate password
+        pass
+    else:
+        form.data["password"] = password
+
+    form.data["about"] = form.get("about", "")
 
     return len(form.errors) == 0
 
@@ -136,28 +169,28 @@ def login_page():
                 "login.html",
                 values=request.form,
             )
-        else:
-            user = load_user(request.form.data["name"])
-            if user is not None:        
-                login_user(user)
-                print('Logged in')
-        # title = request.form.data["title"]
-        # year = request.form.data["year"]
-        # movie = Movie(title, year=year)
-        # db = current_app.config["db"]
-        # movie_key = db.add_movie(movie)
+        # TODO: validation
+        user = load_user(request.form.data["password"])
+        if user is not None:        
+            login_user(user)
+            print('Logged in')
         return redirect(url_for("home_page"))
 
 def validate_login_form(form):
     form.data = {}
     form.errors = {}
 
-    form_name = form.get("name", "").strip()
+    form_name = form.get("email", "").strip()
     if len(form_name) == 0:
-        form.errors["name"] = "Name can not be blank."
+        form.errors["email"] = "Email can not be blank."
     else:
-        form.data["name"] = form_name
+        form.data["email"] = form_name
 
+    password = form.get("password", "")
+    if len(form_name) == 0:
+        form.errors["password"] = "Password can not be blank"
+    else:
+        form.data["password"] = password
 
 
     return len(form.errors) == 0

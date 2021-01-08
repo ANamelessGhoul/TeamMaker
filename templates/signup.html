@@ -3,19 +3,31 @@
 {% block title %}Sign up{% endblock %}
 {% block content %}
 
-<div class="column is-4 is-offset-4">
-    <h1 class="title">Sign up</h1>
+<form action="" method="post" name="movie_edit"> 
+    <div class="container" style="text-align: center">
+        <h1 class="title">Sign up</h1>
+    </div>
 
-    <form action="" method="post" name="movie_edit"> 
-        {{ macros.required_text_field(values, 'name', label = 'First Name')}}
-        {{ macros.required_text_field(values, 'lastname', label = 'Last Name')}}
-        {{ macros.required_text_field(values, 'password', type='password')}}
+    <div class="columns is-centered">
+        <div class="column is-4">
+            {{ macros.required_text_field(values, 'firstname', label = 'First Name', placeholder = 'Choose username', required=False)}}
+            {{ macros.required_text_field(values, 'email', type='email')}}
+            {{ macros.required_text_area(values, 'about', placeholder='Tell others about yourself')}}
 
-        <div class="field is-grouped">
-            <div class="control">
-                <button class="button is-primary">Sign up</button>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button class="button is-primary">Sign up</button>
+                </div>
             </div>
         </div>
-    </form>
-</div>
+        <div class="column is-4">
+
+            {{ macros.required_text_field(values, 'lastname', label = 'Last Name')}}
+
+            {{ macros.required_text_field(values, 'password', type='password')}}
+            {{ macros.required_text_area(values, 'experience', placeholder='Describe your experience in game development')}}
+        </div>
+    </div>
+</form>
+
 {% endblock %}

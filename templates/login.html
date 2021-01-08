@@ -1,13 +1,16 @@
 {% extends "layout.html" %}
+{% import "macros.html" as macros %}
 {% block title %}Log in{% endblock %}
 {% block content %}
 
-<div class="column is-4 is-offset-4">
+<div class="container" style="text-align: center">
     <h1 class="title">Log in</h1>
+</div>
+<div class="column is-4 is-offset-4">
+
 
     <form action="" method="post" name="movie_edit">
-        {{ macros.required_text_field(values, 'name', label = 'First Name')}}
-        {{ macros.required_text_field(values, 'lastname', label = 'Last Name')}}
+        {{ macros.required_text_field(values, 'email', type='email')}}
         {{ macros.required_text_field(values, 'password', type='password')}}
 
     <div class="field is-grouped">

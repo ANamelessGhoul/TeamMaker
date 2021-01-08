@@ -6,7 +6,8 @@
 - [X] Get sensitive login info out of repository 
 - [X] Database access
 - [X] Display database data
-- [ ] Sign up
+- [ ] Sign up page
+- [ ] Sign up database setup
 - [ ] Login authentication
 - [ ] Account set up
 - [ ] Show profile
