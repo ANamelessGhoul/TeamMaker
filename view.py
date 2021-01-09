@@ -4,7 +4,6 @@ from login import load_user
 import bcrypt
 
 from datetime import datetime
-from movie import Movie
 
 from database import Database
 import operator

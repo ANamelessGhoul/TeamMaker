@@ -8,7 +8,6 @@ from datetime import datetime
 
 import view
 from database import Database
-from movie import Movie
 
 import login
 
