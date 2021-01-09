@@ -111,11 +111,21 @@ class Database:
 
         return bcrypt.checkpw(bytes(password, encoding="utf-8"), bytes(password_hash[0], encoding="utf-8"))
     
-    def AddNewUser(email, first_name, last_name, about, primary_spec, secondary_spec, experience, password):
+    def AddNewUser(self, email, first_name, last_name, about, primary_spec, secondary_spec, experience, password):
         """
         Inserts a new user into the database
         """
-        
-        pass
+        hashed_password = bcrypt.hashpw(bytes(password, encoding="utf-8"), bcrypt.gensalt())
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+
+        expression = ("INSERT INTO Users (Name, Email, ProfileSummary, PrimarySpecialization, SecondarySpecializations, Experience, Password) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s);")
+        data = (first_name + ' ' + last_name, email, about, primary_spec, secondary_spec, experience, hashed_password)
+
+        mycursor.execute(expression, data)
+        mycursor.close()
+        self.mydb.commit()
+        print(password)
 
 

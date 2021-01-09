@@ -54,7 +54,7 @@
             {% for option in options %}
             <div class="control is-expanded">
                 <label class="checkbox">
-                    <input type="checkbox" name="{{ option }}" value="{{ pow(2, options.index(option)) }}" {{ 'checked' if contains(values.data[name], options.index(option)) }}>
+                    <input type="checkbox" name="{{ option }}" value="{{ pow(2, options.index(option)) }}" {{ 'checked' if values.data[name] and contains(values.data[name], options.index(option)) }}>
                     {{ option }}
                 </label>
             </div>

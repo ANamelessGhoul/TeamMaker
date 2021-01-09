@@ -86,7 +86,7 @@ def validate_movie_form(form):
     return len(form.errors) == 0
 
 def contains (a, b):
-    return a & 1 << b != 0
+    return (a & (1 << b)) != 0
 
 def signup_page():
     options = ['Game Design', 'Programming','2D Art', '3D Art', 'Narrative Design', 'Music', 'Sound']
@@ -110,11 +110,16 @@ def signup_page():
                 contains = contains
             )
         
-        # print(request.form.data["firstname"])
-        # print(request.form.data["lastname"])
-        # print(request.form.data["email"])
-        # print(request.form.data["password"])
-        # print(request.form.data["about"])
+        Database.getInstance().AddNewUser(
+            email = request.form.data["email"],
+            first_name = request.form.data["firstname"],
+            last_name = request.form.data["lastname"],
+            about = request.form.data["about"], 
+            primary_spec = request.form.data["primary"], 
+            secondary_spec = request.form.data["secondary"], 
+            experience = request.form.data["experience"], 
+            password = request.form.data["password"]
+        )
         return redirect(url_for("home_page"))
 
 def validate_signup_form(form, options):
