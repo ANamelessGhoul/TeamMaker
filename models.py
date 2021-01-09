@@ -1,12 +1,14 @@
+from specs import getRoles, decodeSpecs
 
 class User:
     def __init__(self, row):
         self.id = row[0]
         self.email = row[1]
         self.name = row[2]
-        self.primary_specialization = row[3]
-        self.secondary_specializations = row[4]
-        self.experience = row[5]
+        self.about = row[3]
+        self.primary_spec = getRoles()[int(row[4])]
+        self.secondary_specs = decodeSpecs(int(row[5]))
+        self.experience = row[6]
     
     
 

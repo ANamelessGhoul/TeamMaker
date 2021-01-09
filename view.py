@@ -3,18 +3,14 @@ from flask_login import login_required, logout_user, login_user
 from login import load_user
 import bcrypt
 
-from datetime import datetime
-
 from database import Database
-import operator
+from specs import getRoles, getSpecializations, specsContains
 
 def image_server(filename):
     return send_from_directory("./images", filename)
 
 def home_page():
-    today = datetime.today()
-    day_name = today.strftime("%A")
-    return render_template("home.html", day = day_name)
+    return render_template("home.html")
 
 #@login_required
 def gamejams_page():
@@ -28,19 +24,17 @@ def gamejams_page():
             print(id)
         return redirect(url_for("gamejams_page"))
 
-def contains (a, b):
-    return (a & (1 << b)) != 0
+
 
 def signup_page():
-    options = ['Game Design', 'Programming','2D Art', '3D Art', 'Narrative Design', 'Music', 'Sound']
     if request.method == "GET":
         values = { "data": {"name": "", "password": ""}}
         return render_template(
             "signup.html", 
             values = values,
             pow = pow,
-            options = options,
-            contains = contains
+            options = getSpecializations(),
+            contains = specsContains
         )
     else:
         valid = validate_signup_form(request.form, options)
@@ -49,8 +43,8 @@ def signup_page():
                 "signup.html",
                 values=request.form,
                 pow = pow,
-                options = options,
-                contains = contains
+                options = getSpecializations(),
+                contains = specsContains
             )
         
         Database.getInstance().AddNewUser(

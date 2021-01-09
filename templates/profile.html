@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block title %} User Name {% endblock %}
+{% block content %} 
+    <div class="columns is-centered">
+        <div class="column is-6">
+            <div class="card">
+                <div class="card-content">
+                    <p class="title is-2"> {{ user.data.name }}</p>
+                    <p class="subtitle is-3"> {{user.data.primary_spec}}</p>
+                    <p class="content"> 
+                        Also works on: {% for spec in user.data.secondary_specs %}
+                        {{ spec }}{% if spec == user.data.secondary_specs[-2] %} and {% elif spec != user.data.secondary_specs[-1] %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                </div>
+                <div class="columns is-centered">
+                    <div class="column is-6">
+                        <div class="card-content">
+                            <p class="subtitle is-4"> About:</p>
+                            <p class="content"> &emsp;{{user.data.about}}</p>
+                        </div>
+                    </div>
+                    <div class="column is-6">
+                        <div class="card-content">
+                            <p class="subtitle is-4"> Experience:</p>
+                            <p class="content"> &emsp;{{user.data.experience}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+    </div>
+
+{% endblock %}
