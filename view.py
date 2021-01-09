@@ -24,6 +24,12 @@ def gamejams_page():
             print(id)
         return redirect(url_for("gamejams_page"))
 
+def profile_page(user_id):
+    user = Database.getInstance().GetUser(user_id)
+    if not user:
+        abort(404)
+    else:
+        return render_template("profile.html", user= user)
 
 
 def signup_page():
@@ -37,13 +43,14 @@ def signup_page():
             contains = specsContains
         )
     else:
+        options = getSpecializations()
         valid = validate_signup_form(request.form, options)
         if not valid:
             return render_template(
                 "signup.html",
                 values=request.form,
                 pow = pow,
-                options = getSpecializations(),
+                options = options,
                 contains = specsContains
             )
         
@@ -109,7 +116,7 @@ def validate_signup_form(form, options):
 
     secondary_spec = 0
     for option in options:
-        if not contains(secondary_spec, primary_spec):
+        if not specsContains(secondary_spec, primary_spec):
             secondary_spec += int(form.get(option, 0))
     form.data["secondary"] = secondary_spec
 
