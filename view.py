@@ -85,33 +85,39 @@ def validate_movie_form(form):
 
     return len(form.errors) == 0
 
+def contains (a, b):
+    return a & 1 << b != 0
+
 def signup_page():
+    options = ['Game Design', 'Programming','2D Art', '3D Art', 'Narrative Design', 'Music', 'Sound']
     if request.method == "GET":
         values = { "data": {"name": "", "password": ""}}
         return render_template(
             "signup.html", 
-            values = values
+            values = values,
+            pow = pow,
+            options = options,
+            contains = contains
         )
     else:
-        valid = validate_signup_form(request.form)
+        valid = validate_signup_form(request.form, options)
         if not valid:
             return render_template(
                 "signup.html",
                 values=request.form,
+                pow = pow,
+                options = options,
+                contains = contains
             )
-        print(request.form.data["firstname"])
-        print(request.form.data["lastname"])
-        print(request.form.data["email"])
-        print(request.form.data["password"])
-        print(request.form.data["about"])
-        # title = request.form.data["title"]
-        # year = request.form.data["year"]
-        # movie = Movie(title, year=year)
-        # db = current_app.config["db"]
-        # movie_key = db.add_movie(movie)
+        
+        # print(request.form.data["firstname"])
+        # print(request.form.data["lastname"])
+        # print(request.form.data["email"])
+        # print(request.form.data["password"])
+        # print(request.form.data["about"])
         return redirect(url_for("home_page"))
 
-def validate_signup_form(form):
+def validate_signup_form(form, options):
     form.data = {}
     form.errors = {}
 
@@ -137,9 +143,8 @@ def validate_signup_form(form):
     email = form.get("email", "").strip()
     if len(email) == 0:
         form.errors["email"] = "Email can not be blank."
-    elif False:
-        # TODO:Check database for email
-        pass
+    elif Database.getInstance().GetUser(email, field = 'email'):
+        form.errors["email"] = "Email already in use."
     else:
         form.data["email"] = email
 
@@ -153,7 +158,35 @@ def validate_signup_form(form):
     else:
         form.data["password"] = password
 
-    form.data["about"] = form.get("about", "")
+
+    primary_spec = int(form.get("primary", -1))
+    if primary_spec < 0:
+        form.errors["primary"] = "You must choose a primary specialization."
+    else:
+        form.data["primary"] = primary_spec
+
+    secondary_spec = 0
+    for option in options:
+        if not contains(secondary_spec, primary_spec):
+            secondary_spec += int(form.get(option, 0))
+    form.data["secondary"] = secondary_spec
+    
+    print('Start Values:')
+    print(primary_spec)
+    print(secondary_spec)
+    print('End Values.')
+
+    about = form.get("about", "")
+    if len(about) == 0:
+        form.errors["about"] = "About can not be blank."
+    else:
+        form.data["about"] = about
+
+    experience = form.get("experience", "")
+    if len(experience) == 0:
+        form.errors["experience"] = "Experience can not be blank."
+    else:
+        form.data["experience"] = experience
 
     return len(form.errors) == 0
 

@@ -1,14 +1,15 @@
 # TODO:
 - [X] Basic flask setup
 - [X] Login sessions
-- [ ] 3rd party signup
+- [ ] ~~3rd party signup~~ (Cancelled for now)
 - [ ] Create more todo items :)
 - [X] Get sensitive login info out of repository 
 - [X] Database access
 - [X] Display database data
 - [X] Sign up page
+- [ ] Sign up page additions
 - [ ] Sign up database setup
-- [ ] Login authentication
+- [X] Login authentication
 - [ ] Account set up
 - [ ] Show profile
 - [ ] Create Game Jam
@@ -16,7 +17,7 @@
 - [ ] Display Current Game Jams attending
 
 # Database TODO:
-- [ ] Add username column to user
+- [ ] ~~Add username column to user~~ (Cancelled for now)
 - [X] Add password to user table
 
 # Game Jam Team Maker

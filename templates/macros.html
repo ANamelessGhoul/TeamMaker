@@ -16,7 +16,7 @@
     <div class="field">
         <label for="{{name}}" class="label">{{label|capitalize}}</label>
         <div class="control ">
-            <textarea name="{{name}}" class="textarea {{'is-danger' if name in values.errors}}" {{'required' if required else ''}} placeholder="{{ placeholder }}" value="{{ values.data[name] }}"></textarea>
+            <textarea name="{{name}}" class="textarea {{'is-danger' if name in values.errors}}" {{'required' if required else ''}} placeholder="{{ placeholder }}">{{ values.data[name] }}</textarea>
         </div>
         {% if name in values.errors %}
         <p class="help is-danger">
@@ -25,3 +25,47 @@
         {% endif %}
     </div>
 {% endmacro %}
+
+{% macro radios(values, name, options, label = name) %}
+    <div class="field">
+        <label class="label">{{label|capitalize}}</label>
+        <div class="control">
+            {% for option in options %}
+            <div class="control is-expanded">
+                <label class="radio">
+                    <input type="radio" name="{{ name }}" value="{{ options.index(option) }}" {{ 'checked' if options.index(option) == values.data[name] }}>
+                    {{ option }}
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+        {% if name in values.errors %}
+        <p class="help is-danger">
+            {{ values.errors[name] }}
+        </p>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro multi_checkbox(values, name, options, label = name, pow = None, contains = None) %}
+    <div class="field">
+        <label class="label">{{label|capitalize}}</label>
+        <div class="control">
+            {% for option in options %}
+            <div class="control is-expanded">
+                <label class="checkbox">
+                    <input type="checkbox" name="{{ option }}" value="{{ pow(2, options.index(option)) }}" {{ 'checked' if contains(values.data[name], options.index(option)) }}>
+                    {{ option }}
+                </label>
+            </div>
+
+            {% endfor %}
+        </div>
+        {% if name in values.errors %}
+        <p class="help is-danger">
+            {{ values.errors[name] }}
+        </p>
+        {% endif %}
+    </div>
+{% endmacro %}
+

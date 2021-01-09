@@ -10,9 +10,10 @@
 
     <div class="columns is-centered">
         <div class="column is-4">
-            {{ macros.required_text_field(values, 'firstname', label = 'First Name', placeholder = 'Choose username', required=False)}}
+            {{ macros.required_text_field(values, 'firstname', label = 'First Name')}}
             {{ macros.required_text_field(values, 'email', type='email')}}
             {{ macros.required_text_area(values, 'about', placeholder='Tell others about yourself')}}
+            {{ macros.radios(values, 'primary', options = options, label='Primary specialization (Select one)')}}
 
             <div class="field is-grouped">
                 <div class="control">
@@ -26,6 +27,7 @@
 
             {{ macros.required_text_field(values, 'password', type='password')}}
             {{ macros.required_text_area(values, 'experience', placeholder='Describe your experience in game development')}}
+            {{ macros.multi_checkbox(values, 'secondary', options = options, pow = pow, label='Secondary specialization (Select many)', contains = contains)}}
         </div>
     </div>
 </form>

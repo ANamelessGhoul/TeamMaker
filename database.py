@@ -110,6 +110,12 @@ class Database:
         mycursor.close()
 
         return bcrypt.checkpw(bytes(password, encoding="utf-8"), bytes(password_hash[0], encoding="utf-8"))
-
+    
+    def AddNewUser(email, first_name, last_name, about, primary_spec, secondary_spec, experience, password):
+        """
+        Inserts a new user into the database
+        """
+        
+        pass
 
 
