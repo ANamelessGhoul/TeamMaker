@@ -7,10 +7,10 @@
 - [X] Database access
 - [X] Display database data
 - [X] Sign up page
-- [ ] Sign up page additions
-- [ ] Sign up database setup
+- [X] Sign up page additions
+- [X] Sign up database setup
 - [X] Login authentication
-- [ ] Account set up
+- [X] Account set up
 - [ ] Show profile
 - [ ] Create Game Jam
 - [ ] Attend Game Jam
