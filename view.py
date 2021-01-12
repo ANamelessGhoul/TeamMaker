@@ -1,5 +1,5 @@
 from flask import Flask, render_template, current_app, abort, request, redirect, url_for,  send_from_directory
-from flask_login import login_required, logout_user, login_user
+from flask_login import login_required, logout_user, login_user, current_user
 from login import load_user
 import bcrypt
 
@@ -31,10 +31,15 @@ def profile_page(user_id):
     else:
         return render_template("profile.html", user= user)
 
+@login_required
+def my_profile_page():
+    user_data = current_user.data
+    return render_template("profile.html", user= user_data)
+
 
 def signup_page():
     if request.method == "GET":
-        values = { "data": {"name": "", "password": ""}}
+        values = { "data": {"password": ""}}
         return render_template(
             "signup.html", 
             values = values,
@@ -116,18 +121,17 @@ def validate_signup_form(form, options):
 
     secondary_spec = 0
     for option in options:
-        if not specsContains(secondary_spec, primary_spec):
-            secondary_spec += int(form.get(option, 0))
+        secondary_spec += int(form.get(option, 0))
     form.data["secondary"] = secondary_spec
 
 
-    about = form.get("about", "")
+    about = form.get("about", "").strip()
     if len(about) == 0:
         form.errors["about"] = "About can not be blank."
     else:
         form.data["about"] = about
 
-    experience = form.get("experience", "")
+    experience = form.get("experience", "").strip()
     if len(experience) == 0:
         form.errors["experience"] = "Experience can not be blank."
     else:
