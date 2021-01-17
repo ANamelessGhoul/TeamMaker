@@ -40,13 +40,29 @@ def gamejams_page(status):
 def gamejams_redirect():
     return redirect(url_for("gamejams_page", status = 'Active'))
 
+@login_required
 def jam_page(jam_id):
-    jam = Database.getInstance().GetGameJam(jam_id)
-    if not jam:
-        abort(404)
-    else:
-        return render_template("jam_info.html", jam = jam, now = datetime.now())
-
+    if request.method == "GET":
+        jam = Database.getInstance().GetGameJam(jam_id)
+        if not jam:
+            abort(404)
+        else:
+            attending = Database.getInstance().GetUsersAttending(jam_id)
+            current_user_id = current_user.data.id
+            user_attending = next((x for x in attending if x.id == current_user_id), None)
+            return render_template(
+                "jam_info.html",
+                jam = jam, 
+                now = datetime.now(), 
+                attending = attending, 
+                current_user_attending = user_attending
+            )
+    elif request.method == "POST":
+        Database.getInstance().UserAttendJam(current_user.data.id, jam_id)
+        #TODO: Redirect to teams page
+        return redirect(url_for("jam_page", jam_id = jam_id))
+        
+@login_required
 def newjam_page():
     if request.method == "GET":
         current_datetime = '{date:%Y-%m-%dT%H:%M}'.format(date=datetime.now())
@@ -65,7 +81,8 @@ def newjam_page():
             endDateString = data['endDate'],
             about = data['about']
         )
-        return redirect(url_for("home_page"))
+        Database.getInstance().UserAttendJam(current_user.data.id, id, True)
+        return redirect(url_for("jam_page", jam_id=id))
 
 def validate_newjam_form(form):
     form.data = {}

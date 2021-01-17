@@ -137,6 +137,25 @@ class Database:
 
         return bcrypt.checkpw(bytes(password, encoding="utf-8"), bytes(password_hash[0], encoding="utf-8"))
     
+    def GetUsersAttending(self, jam_id):
+        """
+        Returns a list of all users attending the given game jam
+        """
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+        expression = "SELECT * FROM Users Join GameJamUsers on Users.Id = GameJamUsers.User_id WHERE Jam_id = %s;"
+        mycursor.execute(expression, (jam_id,))
+        
+        users = []
+        row = mycursor.fetchone()
+        while row is not None:
+            user = models.User(row)
+            user.moderator = row[10]
+            users.append(user)
+            row = mycursor.fetchone()
+        
+        mycursor.close()
+        return users
 
     ### Database Insertions
 
@@ -176,4 +195,18 @@ class Database:
         mycursor.close()
         self.mydb.commit()
         return id
+    
+    def UserAttendJam(self, user_id, jam_id, moderator = False):
+        """
+        Inserts a new entry to represent attending the jam into the database
+        """
 
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+
+        expression = ("INSERT INTO GameJamUsers (user_id, jam_id, organiser) VALUES (%s, %s, %s);")
+        data = (user_id, jam_id, moderator)
+
+        mycursor.execute(expression, data)
+        mycursor.close()
+        self.mydb.commit()

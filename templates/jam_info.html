@@ -6,12 +6,39 @@
             <div class="card">
                 <div class="card-content">
                     <p class="title is-2"> {{ jam.name }}</p>
-                    <p class="subtitle is-4"> Theme: <b>{{ jam.theme if now > jam.startDate else "To be announced..."}}</b></p>
+                    <p class="subtitle is-4"> Theme: <b>{{ jam.theme if now > jam.startDate or current_user_attending.moderator == 1 else "To be announced..."}}</b></p>
                     <p class="content"> <b>Start Date:</b> {{ jam.startDate }}</p>
                     <p class="content"> <b>End Date:</b> {{ jam.endDate }}</p>
                     <p class="content"> <b>Duration:</b> {{ jam.duration }}</p>
                     <p class="subtitle is-4"> About:</p>
                     <p class="content"> &emsp;{{jam.about}}</p>
+
+                    <p class="subtitle is-4"> Moderators:</p>
+                    <ul>
+                    {% for user in attending if user.moderator == 1 %}
+                    <li> <a class="content" href={{ url_for('profile_page', user_id = user.id)}}> {{ user.name }}</a> </li>
+                    {% endfor %}
+                    </ul>
+
+                    {% if now < jam.endDate %}
+                    <div class="content">
+                        {% if current_user_attending == None %}
+                        <form action="" method="post">
+                            <input class="button is-primary"  type="submit" name="join" value="Join Jam"/>
+                        </form>
+                        {% else %}
+                        <input class="button is-disabled" value="Already Joined"/>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <p class="subtitle is-4"> {{ attending|length }} users attending:</p>
+                    <ul>
+                    {% for user in attending %}
+                    <li> <a class="content" href={{ url_for('profile_page', user_id = user.id)}}> {{ user.name }}</a> </li>
+                    {% endfor %}
+                    </ul>
+
                 </div>
             </div>
 

@@ -13,7 +13,8 @@
 - [X] Account set up
 - [X] Show profile
 - [X] Create Game Jam
-- [ ] Attend Game Jam
+- [X] Automatically attend game jam as moderator
+- [X] Attend Game Jam
 - [ ] Create Team
 - [ ] List Teams
 - [ ] Filter Team search to primary
@@ -28,4 +29,4 @@
 
 ## What is Game Jam Team Maker:
 
-This app is a flask app meant to help attendees of online game jams in finding a team that they are compatible with.
+Game Jam Team Maker is a flask app meant to help attendees of online game jams in finding a team that they are compatible with.
