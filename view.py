@@ -14,17 +14,39 @@ def home_page():
     return render_template("home.html")
 
 #@login_required
-def gamejams_page():
+def gamejams_page(status):
     if request.method == "GET":
         database = Database.getInstance()
-        gamejams = database.GetAllGameJams()
-        return render_template("gamejams.html", gamejams = sorted(gamejams, key=lambda x: x.startDate, reverse=False))
+        if status == "Active":
+            gamejams = database.GetActiveGameJams()
+        elif status == "Ongoing":
+            gamejams = database.GetOngoingGameJams()
+        elif status == "Past":
+            gamejams = database.GetPastGameJams()
+        elif status == "Upcoming":
+            gamejams = database.GetUpcomingGameJams()
+        elif status == "All":
+            gamejams = database.GetAllGameJams()
+        else:
+            abort(404)
+
+        return render_template("gamejams.html", now = datetime.now(), gamejams = sorted(gamejams, key=lambda x: x.startDate, reverse=False))
     else:
         form_jam_ids = request.form.getlist("jam_ids")
         for id in form_jam_ids:
             print(id)
-        return redirect(url_for("gamejams_page"))
-    
+        return redirect(url_for("gamejams_page", status = status))
+
+def gamejams_redirect():
+    return redirect(url_for("gamejams_page", status = 'Active'))
+
+def jam_page(jam_id):
+    jam = Database.getInstance().GetGameJam(jam_id)
+    if not jam:
+        abort(404)
+    else:
+        return render_template("jam_info.html", jam = jam, now = datetime.now())
+
 def newjam_page():
     if request.method == "GET":
         current_datetime = '{date:%Y-%m-%dT%H:%M}'.format(date=datetime.now())

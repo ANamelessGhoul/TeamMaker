@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title %} {{ jam.name|title }} {% endblock %}
+{% block content %} 
+    <div class="columns is-centered">
+        <div class="column is-6">
+            <div class="card">
+                <div class="card-content">
+                    <p class="title is-2"> {{ jam.name }}</p>
+                    <p class="subtitle is-4"> Theme: <b>{{ jam.theme if now > jam.startDate else "To be announced..."}}</b></p>
+                    <p class="content"> <b>Start Date:</b> {{ jam.startDate }}</p>
+                    <p class="content"> <b>End Date:</b> {{ jam.endDate }}</p>
+                    <p class="content"> <b>Duration:</b> {{ jam.duration }}</p>
+                    <p class="subtitle is-4"> About:</p>
+                    <p class="content"> &emsp;{{jam.about}}</p>
+                </div>
+            </div>
+
+        </div>
+        
+    </div>
+
+{% endblock %}

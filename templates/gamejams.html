@@ -23,11 +23,13 @@
                             <a href="">
                             </a>
                         </td> -->
-                        <td>{{ jam.name }}</td>
-                        <td>{{ jam.theme }}</td>
+                        
+                        <td><a href="{{ url_for('jam_page', jam_id = jam.id) }}">{{ jam.name }}</a></td>
+                        <td>{{ jam.theme if now > jam.startDate else "To be announced..."}}</td>
                         <td>{{ jam.startDate }}</td>
                         <td>{{ jam.endDate }}</td>
                         <td>{{ jam.endDate - jam.startDate}}</td>
+                        
                     </tr>
                     {% endfor %}
                 </tbody>

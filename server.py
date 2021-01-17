@@ -21,7 +21,9 @@ def create_app():
     app.add_url_rule("/", view_func = view.home_page)
     app.add_url_rule("/image/<filename>", view_func=view.image_server)
 
-    app.add_url_rule("/gamejams", view_func = view.gamejams_page, methods=["GET", "POST"])
+    app.add_url_rule("/gamejams/<status>", view_func = view.gamejams_page, methods=["GET", "POST"])
+    app.add_url_rule("/gamejams", view_func = view.gamejams_redirect, methods=["GET", "POST"])
+    app.add_url_rule("/viewjam/<int:jam_id>", view_func = view.jam_page, methods=["GET"])
     app.add_url_rule("/newjam", view_func = view.newjam_page, methods=["GET", "POST"])
 
     app.add_url_rule("/profile/<int:user_id>", view_func = view.profile_page)

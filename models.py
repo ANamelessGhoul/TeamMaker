@@ -19,7 +19,12 @@ class GameJam:
         self.theme = row[2]
         self.startDate = row[3]
         self.endDate = row[4]
-        self.description = row[5]
+        self.about = row[5]
+    
+    @property
+    def duration(self):
+        return self.endDate - self.startDate
+
 
 class Team:
     def __init__(self, row):

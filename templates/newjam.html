@@ -21,12 +21,12 @@
         <div class="column is-6">
             
             {{ macros.required_text_field(values, 'name', label = 'Jam Name') }}
-            {{ macros.required_text_field(values, 'theme', label = 'Jam theme') }}
+            {{ macros.required_text_field(values, 'theme', label = 'Jam theme', placeholder='Only visible after start date.') }}
             {{ macros.required_text_area(values, 'about', placeholder='Tell others what this jam is about.') }}
 
             <div class="field is-grouped">
                 <div class="control">
-                    <button class="button is-primary">Sign up</button>
+                    <button class="button is-primary">Create Jam</button>
                 </div>
             </div>
         </div>

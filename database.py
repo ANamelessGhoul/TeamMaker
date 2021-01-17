@@ -34,11 +34,15 @@ class Database:
     # def __del__(self):
     #     self.mydb.close()
 
+
+    ### Database queries
+
     times_dict = {
         "All": "SELECT * FROM GameJams",
-        "Active": "SELECT * FROM GameJams WHERE startDate < CURRENT_TIMESTAMP() AND endDate > CURRENT_TIMESTAMP()",
-        "Upcoming": "SELECT * FROM GameJams WHERE startDate > CURRENT_TIMESTAMP()",
-        "Past": "SELECT * FROM GameJams WHERE endDate < CURRENT_TIMESTAMP()"
+        "Ongoing": "SELECT * FROM GameJams WHERE startDate <= CURRENT_TIMESTAMP() AND endDate > CURRENT_TIMESTAMP()",
+        "Upcoming": "SELECT * FROM GameJams WHERE startDate >= CURRENT_TIMESTAMP()",
+        "Active": "SELECT * FROM GameJams WHERE endDate > CURRENT_TIMESTAMP()",
+        "Past": "SELECT * FROM GameJams WHERE endDate <= CURRENT_TIMESTAMP()"
     }
 
     def _GetGameJams(self, time):
@@ -69,22 +73,44 @@ class Database:
         Returns an array of all game jams where current timestamp is less than start date of game jam
         """
         return self._GetGameJams("Upcoming")
-
+    
     def GetActiveGameJams(self):
         """
         Returns an array of all game jams where current timestamp is within start and end date of game jam
         """
         return self._GetGameJams("Active")
 
+    def GetOngoingGameJams(self):
+        """
+        Returns an array of all game jams where current timestamp is within start and end date of game jam
+        """
+        return self._GetGameJams("Ongoing")
+
     def GetPastGameJams(self):
         """
         Returns an array of all game jams where current timestamp is greater than end date of game jam
         """
         return self._GetGameJams("Past")
+
+    def GetGameJam(self, id):
+        """
+        Returns game jam with id from database
+        """
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+        mycursor.execute("SELECT * FROM GameJams WHERE id = %(id)s", {'id': id})
+
+        jam = mycursor.fetchone()
+        mycursor.close()
+
+        if jam is not None:
+            return models.GameJam(jam)
+        else:
+            return None
     
     def GetUser(self, value, field = 'id'):
         """
-        Returns user with id from database
+        Returns user with value corresponding to field from database
         """
         self.mydb.commit()
         mycursor = self.mydb.cursor()
@@ -111,6 +137,9 @@ class Database:
 
         return bcrypt.checkpw(bytes(password, encoding="utf-8"), bytes(password_hash[0], encoding="utf-8"))
     
+
+    ### Database Insertions
+
     def AddNewUser(self, email, first_name, last_name, about, primary_spec, secondary_spec, experience, password):
         """
         Inserts a new user into the database
