@@ -69,3 +69,16 @@
     </div>
 {% endmacro %}
 
+{% macro datetime(values, name, min, max, label = name) %}
+    <div class="field">
+        <label class="label">{{label|capitalize}}</label>
+        <input type="datetime-local" required name={{ name }}
+            value= {{ values.data[name] }} {{ 'min=' + min if min }} {{ 'max=' + max if max }}>
+        {% if name in values.errors %}
+        <p class="help is-danger">
+            {{ values.errors[name] }}
+        </p>
+        {% endif %}
+    </div>
+{% endmacro %}
+

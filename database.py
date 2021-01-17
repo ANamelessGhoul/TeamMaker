@@ -126,6 +126,25 @@ class Database:
         mycursor.execute(expression, data)
         mycursor.close()
         self.mydb.commit()
-        print(password)
 
+    def AddNewJam(self, name, theme, startDateString, endDateString, about):
+        """
+        Inserts a new jam into the database
+        """
+
+        startDate = startDateString.replace("T"," ") + ":00"
+        endDate = endDateString.replace("T"," ") + ":00"
+
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+
+        expression = ("INSERT INTO GameJams (Name, Theme, StartDate, EndDate, Description) "
+        "VALUES (%s, %s, %s, %s, %s);")
+        data = (name, theme, startDate, endDate, about)
+
+        mycursor.execute(expression, data)
+        id = mycursor.lastrowid
+        mycursor.close()
+        self.mydb.commit()
+        return id
 

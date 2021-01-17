@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% import "macros.html" as macros %}
+{% block title %}Create Game Jam{% endblock %}
+{% block content %}
+
+<form action="" method="post" name="movie_edit"> 
+    <div class="container" style="text-align: center">
+        <h1 class="title">Create Game Jam</h1>
+    </div>
+
+    <div class="columns is-centered">
+        <div class="column is-3">
+            {{ macros.datetime(values, 'startDate', min = min, label = 'Start Date') }}
+        </div>
+        <div class="column is-3">
+            {{ macros.datetime(values, 'endDate', min = min, label = 'End Date') }}
+        </div>
+    </div>
+
+    <div class="columns is-centered">
+        <div class="column is-6">
+            
+            {{ macros.required_text_field(values, 'name', label = 'Jam Name') }}
+            {{ macros.required_text_field(values, 'theme', label = 'Jam theme') }}
+            {{ macros.required_text_area(values, 'about', placeholder='Tell others what this jam is about.') }}
+
+            <div class="field is-grouped">
+                <div class="control">
+                    <button class="button is-primary">Sign up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+{% endblock %}

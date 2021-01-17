@@ -2,6 +2,7 @@ from flask import Flask, render_template, current_app, abort, request, redirect,
 from flask_login import login_required, logout_user, login_user, current_user
 from login import load_user
 import bcrypt
+from datetime import datetime
 
 from database import Database
 from specs import getRoles, getSpecializations, specsContains
@@ -17,12 +18,70 @@ def gamejams_page():
     if request.method == "GET":
         database = Database.getInstance()
         gamejams = database.GetAllGameJams()
-        return render_template("gamejams.html", gamejams = sorted(gamejams, key=lambda x: x.startDate, reverse=True))
+        return render_template("gamejams.html", gamejams = sorted(gamejams, key=lambda x: x.startDate, reverse=False))
     else:
         form_jam_ids = request.form.getlist("jam_ids")
         for id in form_jam_ids:
             print(id)
         return redirect(url_for("gamejams_page"))
+    
+def newjam_page():
+    if request.method == "GET":
+        current_datetime = '{date:%Y-%m-%dT%H:%M}'.format(date=datetime.now())
+        values = { "data": {"startDate": current_datetime, "endDate": current_datetime}}
+        return render_template("newjam.html", values = values, min = current_datetime)
+    else:
+        valid = validate_newjam_form(request.form)
+        if not valid:
+            current_datetime = '{date:%Y-%m-%dT%H:%M}'.format(date=datetime.now())
+            return render_template("newjam.html", values=request.form, min = current_datetime)
+        data = request.form.data
+        id = Database.getInstance().AddNewJam(
+            name = data['name'],
+            theme = data['theme'],
+            startDateString = data['startDate'],
+            endDateString = data['endDate'],
+            about = data['about']
+        )
+        return redirect(url_for("home_page"))
+
+def validate_newjam_form(form):
+    form.data = {}
+    form.errors = {}
+
+    #validate dates
+    startDateString = form.get("startDate", "2021-01-01T00:00")
+    startDate = datetime.strptime(startDateString, '%Y-%m-%dT%H:%M')
+    form.data['startDate'] = startDateString
+
+    endDateString = form.get("endDate", "2021-01-01T00:00")
+    endDate = datetime.strptime(endDateString, '%Y-%m-%dT%H:%M')
+    form.data['endDate'] = endDateString
+
+    if endDate <= startDate:
+        form.errors['endDate'] = "End date must be after start date!"
+
+    # validate jam name
+    jam_name = form.get("name", "").strip()
+    if len(jam_name) == 0:
+        form.errors["name"] = "Jam name can not be blank."
+    elif len(jam_name) > 255:
+        form.errors["name"] = "Jam name is too long."
+    else:
+        form.data["name"] = jam_name
+
+    # validate jam theme
+    theme = form.get("theme", "").strip()
+    if len(theme) == 0:
+        form.errors["theme"] = "Theme can not be blank."
+    elif len(theme) > 255:
+        form.errors["theme"] = "Theme is too long."
+    else:
+        form.data["theme"] = theme
+
+    form.data["about"] = form.get("about", "")
+
+    return len(form.errors) == 0
 
 def profile_page(user_id):
     user = Database.getInstance().GetUser(user_id)
@@ -141,7 +200,7 @@ def validate_signup_form(form, options):
 
 def login_page():
     if request.method == "GET":
-        values = { "data": {"name": "", "password": ""}}
+        values = { "data": {"password": ""}}
         return render_template(
             "login.html", 
             values = values

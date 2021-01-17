@@ -11,13 +11,17 @@
 - [X] Sign up database setup
 - [X] Login authentication
 - [X] Account set up
-- [ ] Show profile
-- [ ] Create Game Jam
+- [X] Show profile
+- [X] Create Game Jam
 - [ ] Attend Game Jam
+- [ ] Create Team
+- [ ] List Teams
+- [ ] Filter Team search to primary
+- [ ] Join Team
 - [ ] Display Current Game Jams attending
 
 # Database TODO:
-- [ ] ~~Add username column to user~~ (Cancelled for now)
+- [ ] ~~Add username column to user~~ (Replaced by email)
 - [X] Add password to user table
 
 # Game Jam Team Maker
