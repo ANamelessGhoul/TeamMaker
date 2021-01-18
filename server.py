@@ -11,6 +11,8 @@ from database import Database
 
 import login
 
+from flask_socketio import SocketIO
+from messaging import initializeEvents
 
 def create_app():
     # Configure flask app
@@ -20,6 +22,8 @@ def create_app():
 
     app.add_url_rule("/", view_func = view.home_page)
     app.add_url_rule("/image/<filename>", view_func=view.image_server)
+
+    app.add_url_rule("/chatroom", view_func=view.chat_page)
 
     app.add_url_rule("/gamejams/<status>", view_func = view.gamejams_page, methods=["GET", "POST"])
     app.add_url_rule("/gamejams", view_func = view.gamejams_redirect, methods=["GET", "POST"])
@@ -43,15 +47,22 @@ def create_app():
     login_manager.login_view = "login_page"
 
 
+    # Configure SocketIO
+    socketio = SocketIO(app, manage_session=False)
+    initializeEvents(socketio)
 
     # Get Settings
     app.config.from_object("settings")
-    return app
+    return {'app': app, 'socketio': socketio}
+
 
 
 if __name__ == "__main__":
 
-    app = create_app()
-    app.run(host = "0.0.0.0", port = 8080)
+    apps = create_app()
+
+    
+    apps['socketio'].run(apps['app'], host = "0.0.0.0", port = 8080)
+    #app.run(host = "0.0.0.0", port = 8080)
 
 

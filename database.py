@@ -22,18 +22,12 @@ class Database:
         else:
             Database.__instance = self
         # Set up sql connection
-        # TODO: Replace with real connection
         self.mydb = mysql.connector.connect(
             host=config('SQL_HOST'),
             user=config('SQL_USER'),
             password=config('SQL_PASSWORD'),
             database=config('SQL_DATABASE')
         )
-
-
-    # def __del__(self):
-    #     self.mydb.close()
-
 
     ### Database queries
 

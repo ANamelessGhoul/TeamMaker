@@ -15,6 +15,12 @@
 - [X] Create Game Jam
 - [X] Automatically attend game jam as moderator
 - [X] Attend Game Jam
+- [ ] Selection for jam sorting
+- [ ] Display attended active jams on homepage
+- [X] Chatting
+- [X] Chat rooms
+- [ ] Create chat rooms
+- [ ] Chat history
 - [ ] Create Team
 - [ ] List Teams
 - [ ] Filter Team search to primary

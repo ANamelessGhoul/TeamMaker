@@ -7,11 +7,14 @@ from datetime import datetime
 from database import Database
 from specs import getRoles, getSpecializations, specsContains
 
+def home_page():
+    return render_template("home.html")
+
 def image_server(filename):
     return send_from_directory("./images", filename)
 
-def home_page():
-    return render_template("home.html")
+def chat_page():
+    return render_template("messaging.html")
 
 #@login_required
 def gamejams_page(status):

@@ -1,0 +1,118 @@
+{% extends "layout.html" %}
+{% block title %} Chat Room {% endblock %}
+{% block content %} 
+    <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+
+    <div class="columns is-centered">
+        <div class="column is-6">
+            <div id="messages" class="content is-clearfix" style="max-height:60vh; overflow-y:auto">
+                <article class="message is-pulled-left" style="width:60%" >
+                    <div class="message-header">
+                        <p>User Name</p>
+                    </div>
+                    <div class="message-body">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec nulla.Nullam gravida purus diam, et dictum <a>felis venenatis</a> efficitur. Aenean ac <em>eleifend lacus</em>, in mollis lectus.
+                    </div>
+                </article>
+
+                <article class="message is-pulled-right" style="width:60%">
+                    <div class="message-header">
+                        <p>User Name</p>
+                    </div>
+                    <div class="message-body">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec nulla.Nullam gravida purus diam, et dictum <a>felis venenatis</a> efficitur. Aenean ac <em>eleifend lacus</em>, in mollis lectus.
+                    </div>
+                </article>
+            </div>
+            <div class="field is-grouped is-horizontal">
+                <div class="control is-expanded">
+                    <input id="message_box" type="text" class="input" placeholder= "Message"/>
+                </div>
+                <div class="control">
+                    <button id="send_button" class="button is-primary">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+        function htmlToElem(html) {
+            let template = document.createElement('template');
+            html = html.trim(); // Never return a space text node as a result
+            template.innerHTML = html;
+            return template.content;
+        }
+
+        function getMessageTemplate(body = 'Lorem ipsum dolor', username = 'John Doe', isAuthor = false){
+            return htmlToElem(`
+                <article class="message ${isAuthor ? 'is-pulled-right is-success' : 'is-pulled-left'}" style="width:60%">
+                    <div class="message-header">
+                        <p>${username}</p>
+                    </div>
+                    <div class="message-body">
+                        <p>${body}</p>
+                    </div>
+                </article>`);
+        }
+
+        function scrollDown() { 
+            var text = document.getElementById('messages'); 
+            text.scrollTop = text.scrollHeight;
+            console.log('moved');
+        }      
+
+        var room_id = 1;
+        var user_id = 0;
+        var socket = io();
+        socket.on('connect', function() {
+            console.log('Connected')
+            socket.emit('join', {room: room_id});
+        });
+
+        socket.on('disconnect', function() {
+            console.log('Disconnected')
+            socket.emit('leave', {room: room_id});
+        });
+
+        socket.on('message', function(data){
+            console.log('Received Message ' + data.data);
+            document.getElementById('messages').appendChild(getMessageTemplate(data.data, data.username, user_id == data.id));
+            scrollDown()
+        });
+
+        socket.on('register', function(id)
+        {
+            console.log('registered as: ' + id);
+            user_id = id;
+        });
+
+        function sendMessage() {
+                    
+            message_text = document.getElementById('message_box').value
+            if (message_text !== ''){
+                document.getElementById('message_box').value = '';
+                console.log('Sent: "' + message_text + '"');
+
+                
+                socket.emit('message', {data: message_text, room: room_id});
+            }
+
+        }
+
+        document.getElementById('send_button').addEventListener('click', sendMessage)
+
+
+        function processEnterPressed(event) {
+            if (!event) {
+                var event = window.event;
+            }
+            if (event.keyCode == 13){
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        document.getElementById('message_box').addEventListener('keydown',processEnterPressed, false);
+
+    </script>
+
+{% endblock %}
