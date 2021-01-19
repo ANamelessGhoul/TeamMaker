@@ -151,6 +151,23 @@ class Database:
         mycursor.close()
         return users
 
+    def GetMessages(self, chat_id, count = 500):
+        """
+        Returns a list of size count with messages from chat room chat_id
+        """
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+        expression = "SELECT Content, Author_id, Name FROM Messages JOIN Users ON Messages.Author_id = Users.id WHERE Messages.Chatroom_id = %s  ORDER BY Messages.DateSent DESC LIMIT %s;"
+        mycursor.execute(expression, (chat_id,count))
+        
+        rows = mycursor.fetchall()
+
+        keys = ['data','user_id', 'user_name']
+        messages = [dict(zip(keys, values)) for values in rows]
+        messages.reverse()
+        mycursor.close()
+        return messages
+
     ### Database Insertions
 
     def AddNewUser(self, email, first_name, last_name, about, primary_spec, secondary_spec, experience, password):
@@ -200,6 +217,21 @@ class Database:
 
         expression = ("INSERT INTO GameJamUsers (user_id, jam_id, organiser) VALUES (%s, %s, %s);")
         data = (user_id, jam_id, moderator)
+
+        mycursor.execute(expression, data)
+        mycursor.close()
+        self.mydb.commit()
+    
+    def InsertMessage(self, user_id, room_id, message):
+        """
+        Inserts a new message with user id and chatroom id into the database
+        """
+        
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+
+        expression = ("INSERT INTO Messages (Content, Author_id, Chatroom_id) Values (%s, %s, %s);")
+        data = (message, user_id, room_id)
 
         mycursor.execute(expression, data)
         mycursor.close()

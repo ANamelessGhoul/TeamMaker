@@ -20,7 +20,7 @@
 - [X] Chatting
 - [X] Chat rooms
 - [ ] Create chat rooms
-- [ ] Chat history
+- [X] Chat history
 - [ ] Create Team
 - [ ] List Teams
 - [ ] Filter Team search to primary

@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% import "macros.html" as macros %}
 {% block title %} Chat Room {% endblock %}
 {% block content %} 
     <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
@@ -6,23 +7,9 @@
     <div class="columns is-centered">
         <div class="column is-6">
             <div id="messages" class="content is-clearfix" style="max-height:60vh; overflow-y:auto">
-                <article class="message is-pulled-left" style="width:60%" >
-                    <div class="message-header">
-                        <p>User Name</p>
-                    </div>
-                    <div class="message-body">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec nulla.Nullam gravida purus diam, et dictum <a>felis venenatis</a> efficitur. Aenean ac <em>eleifend lacus</em>, in mollis lectus.
-                    </div>
-                </article>
-
-                <article class="message is-pulled-right" style="width:60%">
-                    <div class="message-header">
-                        <p>User Name</p>
-                    </div>
-                    <div class="message-body">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec nulla.Nullam gravida purus diam, et dictum <a>felis venenatis</a> efficitur. Aenean ac <em>eleifend lacus</em>, in mollis lectus.
-                    </div>
-                </article>
+                {% for message in past_messages %}
+                {{ macros.message_template(message, current_user_id) }}
+                {% endfor %}
             </div>
             <div class="field is-grouped is-horizontal">
                 <div class="control is-expanded">

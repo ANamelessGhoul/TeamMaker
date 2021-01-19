@@ -14,7 +14,8 @@ def image_server(filename):
     return send_from_directory("./images", filename)
 
 def chat_page():
-    return render_template("messaging.html")
+    past_messages = Database.getInstance().GetMessages(1)
+    return render_template("messaging.html", past_messages=past_messages, current_user_id=current_user.data.id)
 
 #@login_required
 def gamejams_page(status):

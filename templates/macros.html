@@ -82,3 +82,13 @@
     </div>
 {% endmacro %}
 
+{% macro message_template(message, current_user_id) %}
+<article class="message {{ 'is-pulled-right is-success' if current_user_id == message['user_id'] else 'is-pulled-left'}}" style="width:60%">
+    <div class="message-header">
+        <p>{{ message['user_name'] }}</p>
+    </div>
+    <div class="message-body">
+        <p>{{ message['data'] }}</p>
+    </div>
+</article>
+{% endmacro %}
