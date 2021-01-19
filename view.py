@@ -94,18 +94,21 @@ def jam_page(jam_id):
 
         
         return redirect(url_for("jam_page", jam_id = jam_id))
-        
+
+def render_jam_page(values, current_datetime, edit_mode = False):
+    return render_template("newjam.html", values = values, min = current_datetime, edit_mode = edit_mode)
+
 @login_required
 def newjam_page():
     if request.method == "GET":
         current_datetime = '{date:%Y-%m-%dT%H:%M}'.format(date=datetime.now())
         values = { "data": {"startDate": current_datetime, "endDate": current_datetime}}
-        return render_template("newjam.html", values = values, min = current_datetime)
+        return render_jam_page(values, current_datetime)
     else:
         valid = validate_newjam_form(request.form)
         if not valid:
             current_datetime = '{date:%Y-%m-%dT%H:%M}'.format(date=datetime.now())
-            return render_template("newjam.html", values=request.form, min = current_datetime)
+            return render_jam_page(request.form, current_datetime)
         data = request.form.data
         id = Database.getInstance().AddNewJam(
             name = data['name'],
@@ -116,6 +119,40 @@ def newjam_page():
         )
         Database.getInstance().UserAttendJam(current_user.data.id, id, True)
         return redirect(url_for("jam_page", jam_id=id))
+
+@login_required
+def editjam_page(jam_id):
+    if request.method == "GET":
+        jam = Database.getInstance().GetGameJam(jam_id)
+        if jam is None:
+            abort(404)
+        current_datetime = '{date:%Y-%m-%dT%H:%M}'.format(date=datetime.now())
+
+        values = { 
+            "data": {
+                "startDate": '{date:%Y-%m-%dT%H:%M}'.format(date=jam.startDate),
+                "endDate": '{date:%Y-%m-%dT%H:%M}'.format(date=jam.endDate),
+                "name": jam.name,
+                "theme": jam.theme,
+                "about": jam.about
+            }
+        }
+        return render_jam_page(values, current_datetime, edit_mode = True)
+    else:
+        valid = validate_newjam_form(request.form)
+        if not valid:
+            current_datetime = '{date:%Y-%m-%dT%H:%M}'.format(date=datetime.now())
+            return render_jam_page(request.form, current_datetime, edit_mode = True)
+        data = request.form.data
+        Database.getInstance().UpdateJam(
+            jam_id = jam_id,
+            name = data['name'],
+            theme = data['theme'],
+            startDateString = data['startDate'],
+            endDateString = data['endDate'],
+            about = data['about']
+        )
+        return redirect(url_for("jam_page", jam_id=jam_id))
 
 def validate_newjam_form(form):
     form.data = {}

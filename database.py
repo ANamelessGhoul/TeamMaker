@@ -376,3 +376,30 @@ WHERE
         
         mycursor.close()
         self.mydb.commit()
+
+    ### Database Updates
+
+    def UpdateJam(self, jam_id, name, theme, startDateString, endDateString, about):
+        """
+        Inserts a new jam into the database
+        """
+
+        startDate = startDateString.replace("T"," ") + ":00"
+        endDate = endDateString.replace("T"," ") + ":00"
+
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+
+        expression = """
+UPDATE GameJams 
+	SET Name = %s,
+		Theme = %s,
+		StartDate = %s,
+		EndDate = %s,
+		Description = %s
+	WHERE id = %s"""
+        data = (name, theme, startDate, endDate, about, jam_id)
+
+        mycursor.execute(expression, data)
+        mycursor.close()
+        self.mydb.commit()

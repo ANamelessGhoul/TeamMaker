@@ -34,7 +34,7 @@ Game Jam Team Maker is a flask app meant to help attendees of online game jams i
 - [ ] Filter Team search to primary
 - [ ] Join Team
 - [X] Display Current Game Jams attending
-- [ ] Edit Game Jam
+- [X] Edit Game Jam
 - [X] Delete Game Jam
 - [ ] Edit Team
 - [ ] Delete Team
