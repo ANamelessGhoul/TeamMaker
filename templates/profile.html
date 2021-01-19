@@ -27,6 +27,7 @@
                         </div>
                     </div>
                 </div>
+                {% if other_user %}
                 <div class="card-content">
                     <div class="field is-grouped">
                         <div class="control">
@@ -36,6 +37,22 @@
                         </div>
                     </div>
                 </div>
+                {% else %}
+                <div class="card-content">
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <a class="button is-info" href="{{ url_for('myjams_page') }}">Edit Info</a>
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control ">
+                            <form action="" method="post" name="user_id"> 
+                                <button name="user" class="button is-danger" value="{{user.id}}">Delete Account</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
             </div>
 
         </div>

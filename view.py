@@ -164,12 +164,16 @@ def profile_page(user_id):
     if not viewed_user:
         abort(404)
     else:
-        return render_template("profile.html", user= viewed_user)
+        return render_template("profile.html", user= viewed_user, other_user = True)
 
 @login_required
 def my_profile_page():
     user_data = current_user.data
-    return render_template("profile.html", user= user_data)
+    if request.method == "GET":
+        return render_template("profile.html", user= user_data , other_user = False)
+    else:
+        Database.getInstance().DeleteUser(user_data.id)
+        return redirect(url_for('home_page'))
 
 
 def signup_page():

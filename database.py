@@ -350,3 +350,17 @@ WHERE
         
         mycursor.close()
         self.mydb.commit()
+
+    ### Database Deletions
+
+    def DeleteUser(self, user_id):
+        """
+        Deletes user and all corresponding data from database
+        """
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+
+        mycursor.execute("DELETE FROM Users WHERE id = %s;",(user_id,))
+        
+        mycursor.close()
+        self.mydb.commit()

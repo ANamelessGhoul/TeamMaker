@@ -34,7 +34,7 @@ def create_app():
     app.add_url_rule("/myjams", view_func = view.myjams_page)
 
     app.add_url_rule("/profile/<int:user_id>", view_func = view.profile_page)
-    app.add_url_rule("/myprofile", view_func = view.my_profile_page)
+    app.add_url_rule("/myprofile", view_func = view.my_profile_page, methods=["GET", "POST"])
 
     app.add_url_rule("/signup", view_func=view.signup_page, methods=["GET", "POST"])
     app.add_url_rule("/login", view_func=view.login_page, methods=["GET", "POST"])

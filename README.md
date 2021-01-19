@@ -32,7 +32,7 @@
 - [ ] Edit Team
 - [ ] Delete Team
 - [ ] Edit Profile
-- [ ] Delete Account
+- [X] Delete Account
 
 # Database TODO:
 - [ ] Add ~~username~~ email column to user
