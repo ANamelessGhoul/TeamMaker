@@ -8,9 +8,11 @@
                 <h1 class="title">Team Chats</h1>
             </div>
             <div class="content is-clearfix" style="height:60vh; overflow-y:auto">
-                    {% for chat in team_chats %}
-                    <li>{{ lipsum(1) }}<li>
-                    {% endfor %}
+                {% for chat in team_chats %}
+                <div class="control">
+                    <a class="button" href = "{{ url_for('chat_page', chat_id=chat['id']) }}"> {{ chat['name'] }} </a>
+                </div>
+                {% endfor %}
             </div>
         </div>
         <div class="column is-4">
@@ -18,11 +20,11 @@
                 <h1 class="title">Private Chats</h1>
             </div>
             <div class="content is-clearfix" style="height:60vh; overflow-y:auto">
-                <ul>
-                    {% for chat in private_chats %}
-                    <li>{{ lipsum(1) }}<li>
-                    {% endfor %}
-                </ul>
+                {% for chat in private_chats %}
+                <div class="control">
+                    <a class="button" href = "{{ url_for('chat_page', chat_id=chat['id']) }}"> {{ chat['name'] }} </a>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>

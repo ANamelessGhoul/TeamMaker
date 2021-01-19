@@ -179,8 +179,65 @@ class Database:
         
         count = mycursor.fetchone()[0]
         mycursor.close()
-        
+
         return count == 1
+
+    def GetPrivateChatRooms(self, user_id):
+        """
+        Returns a list of dictionaries of Chatrooms the user is in that are not team chat rooms
+        """
+
+        expression = """
+SELECT Chat_id, u.name as User_count 
+    FROM ChatRoomUsers c 
+    JOIN Users u 
+        ON c.User_id = u.id 
+WHERE 
+    Chat_id IN (
+        SELECT chat.Chat_id 
+            FROM ChatRoomUsers chat 
+        WHERE 
+            EXISTS(
+            SELECT * 
+                FROM Teams t 
+            WHERE t.Chat_id != chat.Chat_id
+            ) 
+        AND 
+            User_id = %s
+        ) 
+    AND User_id != %s;
+"""
+
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+        mycursor.execute(expression, (user_id, user_id))
+        
+        rows = mycursor.fetchall()
+
+        keys = ['id', 'name']
+        messages = [dict(zip(keys, values)) for values in rows]
+        mycursor.close()
+
+        return messages
+
+    def GetTeamChatRooms(self, user_id):
+        """
+        Returns a list of dictionaries of team chat rooms the user is in
+        """
+
+        expression = "SELECT c.Chat_id, t.Name FROM ChatRoomUsers c JOIN Teams t ON t.Chat_id = c.Chat_id WHERE User_id = %s;"
+
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+        mycursor.execute(expression, (user_id,))
+        
+        rows = mycursor.fetchall()
+
+        keys = ['id', 'name']
+        messages = [dict(zip(keys, values)) for values in rows]
+        mycursor.close()
+
+        return messages
 
     ### Database Insertions
 

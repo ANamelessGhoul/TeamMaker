@@ -24,8 +24,9 @@ def chat_page(chat_id):
 @login_required
 def mychats_page():
     user_data = current_user.data
-    #past_messages = Database.getInstance().GetMessages(chat_id)
-    return render_template("mychats.html", team_chats = range(5), private_chats=range(10))
+    team_chats = Database.getInstance().GetTeamChatRooms(user_data.id)
+    private_chats = Database.getInstance().GetPrivateChatRooms(user_data.id)
+    return render_template("mychats.html", team_chats = team_chats, private_chats=private_chats)
 
 
 #@login_required

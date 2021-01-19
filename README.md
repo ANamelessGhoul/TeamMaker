@@ -21,7 +21,7 @@
 - [X] Chat rooms
 - [ ] Create chat rooms
 - [X] Chat history
-- [ ] Show active chats as private and team
+- [X] Show active chats as private and team
 - [ ] Create Team
 - [ ] List Teams
 - [ ] Filter Team search to primary
