@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block title %} Game Jams {% endblock %}
+{% block content %} 
+    <div class = "column is-8 is-offset-2">
+        <h1 class = "title">Game Jams</h1>
+        {% if gamejams %}
+        <h2 class = "title">Attending:</h2>
+        <table class = "table is-striped is-bordered">
+            <thead>
+                <th>Name</th>
+                <th>Theme</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>Duration</th>
+            </thead>
+            <tbody>
+                {% for jam in gamejams %}
+                <tr>
+                    <td><a href="{{ url_for('jam_page', jam_id = jam.id) }}">{{ jam.name }}</a></td>
+                    <td>{{ jam.theme if now > jam.startDate else "To be announced..."}}</td>
+                    <td>{{ jam.startDate }}</td>
+                    <td>{{ jam.endDate }}</td>
+                    <td>{{ jam.endDate - jam.startDate}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        {% if moderating %}
+        <h2 class = "title">Moderating:</h2>
+        <table class = "table is-striped is-bordered">
+            <thead>
+                <th>Name</th>
+                <th>Theme</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>Duration</th>
+            </thead>
+            <tbody>
+                {% for jam in moderating %}
+                <tr>
+                    <td><a href="{{ url_for('jam_page', jam_id = jam.id) }}">{{ jam.name }}</a></td>
+                    <td>{{ jam.theme if now > jam.startDate else "To be announced..."}}</td>
+                    <td>{{ jam.startDate }}</td>
+                    <td>{{ jam.endDate }}</td>
+                    <td>{{ jam.endDate - jam.startDate}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+
+    
+{% endblock %}

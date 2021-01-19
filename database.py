@@ -102,6 +102,24 @@ class Database:
         else:
             return None
     
+    def GetGameJamsAttending(self, user_id):
+        """
+        Internal function to handle reading multiple rows of Game Jams depending on time
+        """
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+        mycursor.execute("SELECT Id, Name, Theme, StartDate, EndDate, Description, Organiser FROM GameJams Join GameJamUsers on GameJams.Id = GameJamUsers.Jam_id WHERE User_id = %s;", (user_id,))
+        
+        jams = {'attending': [], 'moderating': []}
+        row = mycursor.fetchone()
+        while row is not None:
+            status = 'moderating' if row[6] else 'attending'
+            jams[status].append(models.GameJam(row))
+            row = mycursor.fetchone()
+        
+        mycursor.close()
+        return jams
+
     def GetUser(self, value, field = 'id'):
         """
         Returns user with value corresponding to field from database

@@ -138,6 +138,16 @@ def validate_newjam_form(form):
 
     return len(form.errors) == 0
 
+def myjams_page():
+    gamejams = Database.getInstance().GetGameJamsAttending(current_user.get_id())
+    return render_template(
+        "mygamejams.html",
+        now = datetime.now(),
+        gamejams = sorted(gamejams['attending'], key=lambda x: x.startDate, reverse=False),
+        moderating = sorted(gamejams['moderating'], key=lambda x: x.startDate, reverse=False)
+    )
+
+
 def profile_page(user_id):
     user = Database.getInstance().GetUser(user_id)
     if not user:

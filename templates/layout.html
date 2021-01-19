@@ -57,9 +57,14 @@
               </div>
 
               {% if current_user.is_authenticated %}
+              <a class="navbar-item" href="{{ url_for('myjams_page') }}" >
+                My Game Jams
+              </a>
+
               <a class="navbar-item" href="{{ url_for('mychats_page') }}">
                 My Chat Rooms
               </a>
+
               {% endif %}
             </div>
           </div>
