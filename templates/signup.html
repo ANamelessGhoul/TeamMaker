@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% import "macros.html" as macros %}
-{% block title %}Sign up{% endblock %}
+{% block title %}{{ 'Edit Profile' if edit_mode else 'Sign up' }}{% endblock %}
 {% block content %}
 
 <form action="" method="post" name="movie_edit"> 
@@ -11,7 +11,7 @@
     <div class="columns is-centered">
         <div class="column is-4">
             {{ macros.required_text_field(values, 'firstname', label = 'First Name')}}
-            {% if not edit_mode %}}
+            {% if not edit_mode %}
             {{ macros.required_text_field(values, 'email', type='email')}}
             {% endif %}
             {{ macros.required_text_area(values, 'about', placeholder='Tell others about yourself')}}
@@ -26,7 +26,7 @@
         <div class="column is-4">
 
             {{ macros.required_text_field(values, 'lastname', label = 'Last Name')}}
-            {% if not edit_mode %}}
+            {% if not edit_mode %}
             {{ macros.required_text_field(values, 'password', type='password')}}
             {% endif %}
             {{ macros.required_text_area(values, 'experience', placeholder='Describe your experience in game development')}}

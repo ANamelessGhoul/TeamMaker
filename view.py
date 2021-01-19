@@ -191,6 +191,127 @@ def validate_newjam_form(form):
 
     return len(form.errors) == 0
 
+
+@login_required
+def editteam_page(jam_id, team_id):
+    # TODO: Check if jam exists and user is in it
+    if request.method == "GET":
+        team = Database.getInstance().GetTeam(team_id)
+        if team is None:
+            abort(404)
+        print(team.name)
+        values = { "data": 
+        {
+            'name': team.name,
+            'about': team.about,
+            'specs': team.looking_for
+        }}
+        return render_template(
+            "newteam.html",
+            values = values,
+            pow = pow,
+            options = getSpecializations(),
+            contains = specsContains,
+            edit_mode = True
+        )
+    else:
+        valid = validate_newteam_form(request.form, getSpecializations())
+        if not valid:
+            return render_template(
+            "newteam.html",
+            values = request.form,
+            pow = pow,
+            options = getSpecializations(),
+            contains = specsContains,
+            edit_mode = True
+        )
+        data = request.form.data
+
+        team_id = Database.getInstance().UpdateTeam(
+            name = data['name'],
+            about = data['about'],
+            specs = data['specs'],
+            team_id = team_id
+        )
+        
+        #TODO: redirect to team page
+        return redirect(url_for("newteam_page", jam_id=jam_id))
+
+@login_required
+def newteam_page(jam_id):
+    # TODO: Check if jam exists and user is in it
+    if request.method == "GET":
+        values = { "data": {}}
+        return render_template(
+            "newteam.html",
+            values = values,
+            pow = pow,
+            options = getSpecializations(),
+            contains = specsContains,
+            edit_mode = False
+        )
+    else:
+        valid = validate_newteam_form(request.form, getSpecializations())
+        if not valid:
+            return render_template(
+            "newteam.html",
+            values = request.form,
+            pow = pow,
+            options = getSpecializations(),
+            contains = specsContains,
+            edit_mode = False
+        )
+        
+        db = Database.getInstance()
+        chat_id = db.CreateChatroom()
+
+        data = request.form.data
+
+        team_id = db.CreateTeam(
+            name = data['name'],
+            about = data['about'],
+            specs = data['specs'],
+            creator_id = current_user.get_id(),
+            jam_id = jam_id,
+            chat_id = chat_id
+        )
+        user_id = current_user.get_id()
+        db.JoinChatroom(user_id=user_id, chat_id=chat_id)
+        db.JoinTeam(user_id=user_id, team_id=team_id)
+        #TODO: redirect to team page
+        return redirect(url_for("newteam_page", jam_id=jam_id))
+
+def validate_newteam_form(form, options):
+    form.data = {}
+    form.errors = {}
+
+    # validate name
+    team_name = form.get("name", "").strip()
+    if len(team_name) == 0:
+        form.errors["name"] = "Name can not be blank."
+    elif len(team_name) > 255:
+        form.errors["name"] = "Name is too long."
+    else:
+        form.data["name"] = team_name
+
+    # validate about
+    about = form.get("about", "").strip()
+    if len(about) == 0:
+        form.errors["about"] = "About can not be blank."
+    elif len(about) > 511:
+        form.errors["about"] = "About is too long."
+    else:
+        form.data["about"] = about
+
+    # validate looking_for
+    specs = 0
+    for option in options:
+        specs += int(form.get(option, 0))
+    form.data["specs"] = specs
+
+
+    return len(form.errors) == 0
+
 @login_required
 def myjams_page():
     gamejams = Database.getInstance().GetGameJamsAttending(current_user.get_id())

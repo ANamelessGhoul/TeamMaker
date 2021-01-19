@@ -29,14 +29,14 @@ Game Jam Team Maker is a flask app meant to help attendees of online game jams i
 - [X] Create chat rooms by adding button to profile page
 - [X] Chat history
 - [X] Show active chats as private and team
-- [ ] Create Team
+- [X] Create Team
 - [ ] List Teams
 - [ ] Filter Team search to primary
 - [ ] Join Team
 - [X] Display Current Game Jams attending
 - [X] Edit Game Jam
 - [X] Delete Game Jam
-- [ ] Edit Team
+- [X] Edit Team
 - [ ] Delete Team
 - [X] Edit Profile
 - [X] Delete Account

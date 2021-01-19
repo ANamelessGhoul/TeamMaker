@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% import "macros.html" as macros %}
+{% block title %}{{ 'Edit Team' if edit_mode else 'Create Team' }}{% endblock %}
+{% block content %}
+
+<form action="" method="post" name="create_team"> 
+    <div class="container" style="text-align: center">
+        <h1 class="title">{{ 'Edit Team' if edit_mode else 'Create Team' }}</h1>
+    </div>
+
+    <div class="columns is-centered">
+        <div class="column is-6">
+            {{ macros.required_text_field(values, 'name', label = 'Team Name')}}
+            {{ macros.required_text_area(values, 'about', placeholder='Tell others about your team')}}
+            {{ macros.multi_checkbox(values, 'specs', options = options, pow = pow, label='Looking For: (Select many)', contains = contains)}}
+
+            <div class="field is-grouped">
+                <div class="control">
+                    <button class="button is-primary">{{ 'Apply Changes' if edit_mode else 'Create Team' }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

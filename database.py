@@ -207,23 +207,20 @@ class Database:
 
         expression = """
 SELECT Chat_id, u.name as User_count 
-    FROM ChatRoomUsers c 
-    JOIN Users u 
-        ON c.User_id = u.id 
-WHERE 
-    Chat_id IN (
-        SELECT chat.Chat_id 
-            FROM ChatRoomUsers chat 
-        WHERE 
-            EXISTS(
-            SELECT * 
-                FROM Teams t 
-            WHERE t.Chat_id != chat.Chat_id
-            ) 
-        AND 
-            User_id = %s
+FROM ChatRoomUsers c 
+JOIN Users u 
+ON c.User_id = u.id 
+WHERE Chat_id IN (
+    SELECT chat.Chat_id 
+    FROM ChatRoomUsers chat 
+    WHERE NOT EXISTS(
+        SELECT * 
+        FROM Teams t 
+        WHERE t.Chat_id = chat.Chat_id
         ) 
-    AND User_id != %s;
+    AND User_id = %s
+    ) 
+AND User_id != %s;
 """
 
         self.mydb.commit()
@@ -256,6 +253,22 @@ WHERE
         mycursor.close()
 
         return messages
+
+    def GetTeam(self, team_id):
+        """
+        Returns game team with id from database
+        """
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+        mycursor.execute("SELECT * FROM Teams WHERE id = %(id)s", {'id': team_id})
+
+        team = mycursor.fetchone()
+        mycursor.close()
+
+        if team is not None:
+            return models.Team(team)
+        else:
+            return None
 
     ### Database Insertions
 
@@ -351,6 +364,37 @@ WHERE
         mycursor.close()
         self.mydb.commit()
 
+    def CreateTeam(self, name, about, specs, creator_id, jam_id, chat_id):
+        """
+        Inserts a new team into the database
+        """
+
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+
+        expression = ("INSERT INTO Teams (Name, Description, LookingFor, Leader_id, Jam_id, Chat_id) "
+        "VALUES (%s, %s, %s, %s, %s, %s);")
+        data = (name, about, specs, creator_id, jam_id, chat_id)
+
+        mycursor.execute(expression, data)
+        team_id = mycursor.lastrowid
+        mycursor.close()
+        self.mydb.commit()
+        return team_id
+    
+    def JoinTeam(self, user_id, team_id):
+        """
+        Adds user with id user_id to team with id team_id
+        """
+
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+
+        mycursor.execute("INSERT INTO TeamUsers (Team_id, User_id) values (%s, %s);",(team_id, user_id))
+        
+        mycursor.close()
+        self.mydb.commit()
+
     ### Database Deletions
 
     def DeleteUser(self, user_id):
@@ -426,3 +470,21 @@ UPDATE Users
         mycursor.execute(expression, data)
         mycursor.close()
         self.mydb.commit()
+    
+    def UpdateTeam(self, team_id, name, about, specs):
+        """
+        Inserts a new team into the database
+        """
+
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+
+        expression = "UPDATE Teams SET Name = %s, Description = %s, LookingFor = %s WHERE id = %s"
+
+        data = (name, about, specs, team_id)
+
+        mycursor.execute(expression, data)
+        team_id = mycursor.lastrowid
+        mycursor.close()
+        self.mydb.commit()
+        return team_id

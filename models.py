@@ -32,8 +32,11 @@ class Team:
     def __init__(self, row):
         self.id = row[0]
         self.name = row[1]
-        self.description = row[2]
-        self.leader_id = row[3]
+        self.about = row[2]
+        self.looking_for = row[3]
+        self.leader_id = row[4]
+        self.chat_id = row[5]
+
 
 class ChatRoom:
     def __init__(self, row):
