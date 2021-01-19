@@ -48,10 +48,7 @@ def gamejams_page(status):
 
         return render_template("gamejams.html", now = datetime.now(), gamejams = sorted(gamejams, key=lambda x: x.startDate, reverse=False))
     else:
-        form_jam_ids = request.form.getlist("jam_ids")
-        for id in form_jam_ids:
-            print(id)
-        return redirect(url_for("gamejams_page", status = status))
+        return redirect(url_for("gamejams_page", status = request.form.get("status","ALL")))
 
 def gamejams_redirect():
     return redirect(url_for("gamejams_page", status = 'Active'))

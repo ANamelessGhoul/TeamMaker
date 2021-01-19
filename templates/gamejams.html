@@ -1,32 +1,48 @@
 {% extends "layout.html" %}
 {% block title %} Game Jams {% endblock %}
 {% block content %} 
+    <script src = "{{ url_for('static', filename='sortTable.js') }}"></script>
     <div class = "column is-8 is-offset-2">
         <h1 class = "title">Game Jams</h1>
         {% if gamejams %}
-        <form action="" method="post" name="jam_list">
-            <table class = "table is-striped is-bordered">
-                <thead>
-                    <th>Name</th>
-                    <th>Theme</th>
-                    <th>StartDate</th>
-                    <th>EndDate</th>
-                    <th>Duration</th>
-                </thead>
-                <tbody>
-                    {% for jam in gamejams %}
-                    <tr>
-                        <td><a href="{{ url_for('jam_page', jam_id = jam.id) }}">{{ jam.name }}</a></td>
-                        <td>{{ jam.theme if now > jam.startDate else "To be announced..."}}</td>
-                        <td>{{ jam.startDate }}</td>
-                        <td>{{ jam.endDate }}</td>
-                        <td>{{ jam.endDate - jam.startDate}}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <table id="jams" class = "table is-striped is-bordered">
+            <thead>
+                <th onClick="sortTable(0, 'jams')">Name</th>
+                <th onClick="sortTable(1, 'jams')">Theme</th>
+                <th onClick="sortTable(2, 'jams')">StartDate</th>
+                <th onClick="sortTable(3, 'jams')">EndDate</th>
+                <th onClick="sortTable(4, 'jams')">Duration</th>
+            </thead>
+            <tbody>
+                {% for jam in gamejams %}
+                <tr>
+                    <td><a href="{{ url_for('jam_page', jam_id = jam.id) }}">{{ jam.name }}</a></td>
+                    <td>{{ jam.theme if now > jam.startDate else "To be announced..."}}</td>
+                    <td>{{ jam.startDate }}</td>
+                    <td>{{ jam.endDate }}</td>
+                    <td>{{ jam.endDate - jam.startDate}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form id="status" action="" method="post" >
+            <div class="field">
+                <div class="control">
+                    <div class="select is-rounded is-primary">
+                        <select name="status"  onchange='if(this.value != 0) { document.getElementById("status").submit(); }'>
+                            <option value='0'>Jam Status</option>
+                            <option value='Active'>Active</option>
+                            <option value='Ongoing'>Ongoing</option>
+                            <option value='Past'>Past</option>
+                            <option value='Upcoming'>Upcoming</option>
+                            <option value='All'>All</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </form>
+        {% endif %}
     </div>
 
-    {% endif %}
+    
 {% endblock %}
