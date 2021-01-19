@@ -34,11 +34,15 @@ def initializeEvents(socketio):
     @socketio.on('join')
     @authenticated_only
     def on_join(data):
-        username = current_user.data.name
+        user_data = current_user.data
         room = data['room']
+        if not Database.getInstance().IsUserInChatroom(user_data.id, room):
+            disconnect()
+            return
+
         join_room(room)
-        print(current_user.data.name + ' connected to room: ' + str(room))
-        emit('register',current_user.data.id, room=request.sid)
+        print(user_data.name + ' connected to room: ' + str(room))
+        emit('register',user_data.id, room=request.sid)
 
     @socketio.on('leave')
     def on_leave(data):

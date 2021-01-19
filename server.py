@@ -23,7 +23,8 @@ def create_app():
     app.add_url_rule("/", view_func = view.home_page)
     app.add_url_rule("/image/<filename>", view_func=view.image_server)
 
-    app.add_url_rule("/chatroom", view_func=view.chat_page)
+    app.add_url_rule("/chatroom/<int:chat_id>", view_func=view.chat_page)
+    app.add_url_rule("/mychats", view_func=view.mychats_page)
 
     app.add_url_rule("/gamejams/<status>", view_func = view.gamejams_page, methods=["GET", "POST"])
     app.add_url_rule("/gamejams", view_func = view.gamejams_redirect, methods=["GET", "POST"])

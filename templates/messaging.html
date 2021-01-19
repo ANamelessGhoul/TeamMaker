@@ -6,7 +6,7 @@
 
     <div class="columns is-centered">
         <div class="column is-6">
-            <div id="messages" class="content is-clearfix" style="max-height:60vh; overflow-y:auto">
+            <div id="messages" class="content is-clearfix" style="height:55vh; overflow-y:auto">
                 {% for message in past_messages %}
                 {{ macros.message_template(message, current_user_id) }}
                 {% endfor %}
@@ -47,12 +47,13 @@
             console.log('moved');
         }      
 
-        var room_id = 1;
+        const room_id = {{ room_id }};
         var user_id = 0;
         var socket = io();
         socket.on('connect', function() {
             console.log('Connected')
             socket.emit('join', {room: room_id});
+            scrollDown()
         });
 
         socket.on('disconnect', function() {
@@ -61,14 +62,12 @@
         });
 
         socket.on('message', function(data){
-            console.log('Received Message ' + data.data);
             document.getElementById('messages').appendChild(getMessageTemplate(data.data, data.username, user_id == data.id));
             scrollDown()
         });
 
         socket.on('register', function(id)
         {
-            console.log('registered as: ' + id);
             user_id = id;
         });
 

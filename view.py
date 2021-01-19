@@ -13,9 +13,20 @@ def home_page():
 def image_server(filename):
     return send_from_directory("./images", filename)
 
-def chat_page():
-    past_messages = Database.getInstance().GetMessages(1)
-    return render_template("messaging.html", past_messages=past_messages, current_user_id=current_user.data.id)
+@login_required
+def chat_page(chat_id):
+    user_data = current_user.data
+    if not Database.getInstance().IsUserInChatroom(user_data.id, chat_id):
+        abort(403)
+    past_messages = Database.getInstance().GetMessages(chat_id)
+    return render_template("messaging.html", room_id = chat_id, past_messages=past_messages, current_user_id=user_data.id)
+
+@login_required
+def mychats_page():
+    user_data = current_user.data
+    #past_messages = Database.getInstance().GetMessages(chat_id)
+    return render_template("mychats.html", team_chats = range(5), private_chats=range(10))
+
 
 #@login_required
 def gamejams_page(status):

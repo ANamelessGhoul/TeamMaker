@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% import "macros.html" as macros %}
+{% block title %} Chat Room {% endblock %}
+{% block content %} 
+    <div class="columns is-centered">
+        <div class="column is-4">
+            <div class="container is-fluid" style="text-align: center">
+                <h1 class="title">Team Chats</h1>
+            </div>
+            <div class="content is-clearfix" style="height:60vh; overflow-y:auto">
+                    {% for chat in team_chats %}
+                    <li>{{ lipsum(1) }}<li>
+                    {% endfor %}
+            </div>
+        </div>
+        <div class="column is-4">
+            <div class="container is-fluid" style="text-align: center">
+                <h1 class="title">Private Chats</h1>
+            </div>
+            <div class="content is-clearfix" style="height:60vh; overflow-y:auto">
+                <ul>
+                    {% for chat in private_chats %}
+                    <li>{{ lipsum(1) }}<li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

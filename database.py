@@ -167,6 +167,20 @@ class Database:
         messages.reverse()
         mycursor.close()
         return messages
+    
+    def IsUserInChatroom(self, user_id, chat_id):
+        """
+        returns True if player is in the chat room
+        """
+
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+        mycursor.execute("SELECT count(Chat_id) FROM ChatRoomUsers WHERE User_id = %s AND Chat_id = %s;", (user_id,chat_id))
+        
+        count = mycursor.fetchone()[0]
+        mycursor.close()
+        
+        return count == 1
 
     ### Database Insertions
 
