@@ -364,3 +364,15 @@ WHERE
         
         mycursor.close()
         self.mydb.commit()
+
+    def DeleteGameJam(self, jam_id):
+        """
+        Deletes user and all corresponding data from database
+        """
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+
+        mycursor.execute("DELETE FROM GameJams WHERE id = %s;",(jam_id,))
+        
+        mycursor.close()
+        self.mydb.commit()

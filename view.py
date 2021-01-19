@@ -84,8 +84,15 @@ def jam_page(jam_id):
                 current_user_attending = user_attending
             )
     elif request.method == "POST":
-        Database.getInstance().UserAttendJam(current_user.data.id, jam_id)
-        #TODO: Redirect to teams page
+        if request.form.get('delete', None) is not None:
+            Database.getInstance().DeleteGameJam(jam_id)
+            return redirect(url_for("myjams_page"))
+        elif request.form.get('join', None) is not None:
+            Database.getInstance().UserAttendJam(current_user.data.id, jam_id)
+            #TODO: Redirect to teams page
+            return redirect(url_for("jam_page", jam_id = jam_id))
+
+        
         return redirect(url_for("jam_page", jam_id = jam_id))
         
 @login_required
