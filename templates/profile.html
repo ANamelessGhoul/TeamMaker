@@ -27,6 +27,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="card-content">
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <form action="{{ url_for('start_chat') }}" method="post" name="user_id"> 
+                                <button name="user" class="button is-primary" value="{{user.id}}">Message</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>

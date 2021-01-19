@@ -28,6 +28,19 @@ def mychats_page():
     private_chats = Database.getInstance().GetPrivateChatRooms(user_data.id)
     return render_template("mychats.html", team_chats = team_chats, private_chats=private_chats)
 
+def start_chat():
+    print(request.form)
+    other_user = request.form.get('user', None)
+    # TODO: Make sure private chat does not already exist
+    if other_user is None or other_user == current_user.get_id():
+        abort(404)
+
+    db =  Database.getInstance()
+    chat_id = db.CreateChatroom()
+    db.JoinChatroom(current_user.get_id(), chat_id)
+    db.JoinChatroom(other_user, chat_id)
+    
+    return redirect(url_for("chat_page", chat_id=chat_id))
 
 #@login_required
 def gamejams_page(status):
@@ -135,6 +148,7 @@ def validate_newjam_form(form):
 
     return len(form.errors) == 0
 
+@login_required
 def myjams_page():
     gamejams = Database.getInstance().GetGameJamsAttending(current_user.get_id())
     return render_template(
@@ -146,11 +160,11 @@ def myjams_page():
 
 
 def profile_page(user_id):
-    user = Database.getInstance().GetUser(user_id)
-    if not user:
+    viewed_user = Database.getInstance().GetUser(user_id)
+    if not viewed_user:
         abort(404)
     else:
-        return render_template("profile.html", user= user)
+        return render_template("profile.html", user= viewed_user)
 
 @login_required
 def my_profile_page():

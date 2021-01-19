@@ -325,3 +325,28 @@ WHERE
         mycursor.execute(expression, data)
         mycursor.close()
         self.mydb.commit()
+    
+    def CreateChatroom(self):
+        """
+        Creates a new empty chat room and returns its id
+        """
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+
+        mycursor.execute("INSERT INTO Chatrooms () VALUES ();")
+        id = mycursor.lastrowid
+        mycursor.close()
+        self.mydb.commit()
+        return id
+    
+    def JoinChatroom(self, user_id, chat_id):        
+        """
+        Adds user with id user_id into chatroom
+        """
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+
+        mycursor.execute("INSERT INTO ChatRoomUsers (Chat_id, User_id) values (%s, %s);",(chat_id, user_id))
+        
+        mycursor.close()
+        self.mydb.commit()

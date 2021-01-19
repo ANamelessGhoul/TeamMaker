@@ -19,7 +19,7 @@
 - [ ] Display attended active jams on homepage
 - [X] Chatting
 - [X] Chat rooms
-- [ ] Create chat rooms by adding button to profile page
+- [X] Create chat rooms by adding button to profile page
 - [X] Chat history
 - [X] Show active chats as private and team
 - [ ] Create Team
