@@ -42,7 +42,6 @@ def start_chat():
     
     return redirect(url_for("chat_page", chat_id=chat_id))
 
-#@login_required
 def gamejams_page(status):
     if request.method == "GET":
         database = Database.getInstance()
@@ -219,6 +218,54 @@ def my_profile_page():
         Database.getInstance().DeleteUser(user_data.id)
         return redirect(url_for('home_page'))
 
+@login_required
+def editprofile_page():
+    user_data = current_user.data
+    if request.method == "GET":
+        names = user_data.name.split(' ')
+        first_name = ' '.join(names[:-1])
+        last_name = names[-1]
+        values = { 
+            "data":{
+                "firstname": first_name,
+                "lastname": last_name,
+                "about": user_data.about, 
+                "primary": user_data.primary_spec_raw, 
+                "secondary": user_data.secondary_specs_raw, 
+                "experience": user_data.experience, 
+            }
+        }
+        return render_template(
+            "signup.html", 
+            values = values,
+            pow = pow,
+            options = getSpecializations(),
+            contains = specsContains,
+            edit_mode = True
+        )
+    else:
+        options = getSpecializations()
+        valid = validate_signup_form(request.form, options, True)
+        if not valid:
+            return render_template(
+                "signup.html",
+                values=request.form,
+                pow = pow,
+                options = options,
+                contains = specsContains
+            )
+        
+        data = request.form.data
+        Database.getInstance().UpdateUser(
+            user_id = user_data.id,
+            first_name = data["firstname"],
+            last_name = data["lastname"],
+            about = data["about"], 
+            primary_spec = data["primary"], 
+            secondary_spec = data["secondary"], 
+            experience = data["experience"]
+        )
+        return redirect(url_for("my_profile_page"))
 
 def signup_page():
     if request.method == "GET":
@@ -228,7 +275,8 @@ def signup_page():
             values = values,
             pow = pow,
             options = getSpecializations(),
-            contains = specsContains
+            contains = specsContains,
+            edit_mode = False
         )
     else:
         options = getSpecializations()
@@ -254,7 +302,7 @@ def signup_page():
         )
         return redirect(url_for("home_page"))
 
-def validate_signup_form(form, options):
+def validate_signup_form(form, options, edit_mode = False):
     form.data = {}
     form.errors = {}
 
@@ -276,24 +324,25 @@ def validate_signup_form(form, options):
     else:
         form.data["lastname"] = last_name
 
-    # validate email
-    email = form.get("email", "").strip()
-    if len(email) == 0:
-        form.errors["email"] = "Email can not be blank."
-    elif Database.getInstance().GetUser(email, field = 'email'):
-        form.errors["email"] = "Email already in use."
-    else:
-        form.data["email"] = email
+    if not edit_mode:
+        # validate email
+        email = form.get("email", "").strip()
+        if len(email) == 0:
+            form.errors["email"] = "Email can not be blank."
+        elif Database.getInstance().GetUser(email, field = 'email'):
+            form.errors["email"] = "Email already in use."
+        else:
+            form.data["email"] = email
 
-    # validate password
-    password = form.get("password", "")
-    if len(password) == 0:
-        form.errors["password"] = "Password can not be blank."
-    elif False:
-        # TODO:validate password
-        pass
-    else:
-        form.data["password"] = password
+        # validate password
+        password = form.get("password", "")
+        if len(password) == 0:
+            form.errors["password"] = "Password can not be blank."
+        elif False:
+            # TODO:validate password
+            pass
+        else:
+            form.data["password"] = password
 
 
     primary_spec = int(form.get("primary", -1))

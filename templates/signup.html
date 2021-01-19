@@ -5,27 +5,30 @@
 
 <form action="" method="post" name="movie_edit"> 
     <div class="container" style="text-align: center">
-        <h1 class="title">Sign up</h1>
+        <h1 class="title">{{ 'Edit Profile' if edit_mode else 'Sign up' }}</h1>
     </div>
 
     <div class="columns is-centered">
         <div class="column is-4">
             {{ macros.required_text_field(values, 'firstname', label = 'First Name')}}
+            {% if not edit_mode %}}
             {{ macros.required_text_field(values, 'email', type='email')}}
+            {% endif %}
             {{ macros.required_text_area(values, 'about', placeholder='Tell others about yourself')}}
             {{ macros.radios(values, 'primary', options = options, label='Primary specialization (Select one)')}}
 
             <div class="field is-grouped">
                 <div class="control">
-                    <button class="button is-primary">Sign up</button>
+                    <button class="button is-primary">{{ 'Edit Profile' if edit_mode else 'Sign up' }}</button>
                 </div>
             </div>
         </div>
         <div class="column is-4">
 
             {{ macros.required_text_field(values, 'lastname', label = 'Last Name')}}
-
+            {% if not edit_mode %}}
             {{ macros.required_text_field(values, 'password', type='password')}}
+            {% endif %}
             {{ macros.required_text_area(values, 'experience', placeholder='Describe your experience in game development')}}
             {{ macros.multi_checkbox(values, 'secondary', options = options, pow = pow, label='Secondary specialization (Select many)', contains = contains)}}
         </div>

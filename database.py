@@ -381,7 +381,7 @@ WHERE
 
     def UpdateJam(self, jam_id, name, theme, startDateString, endDateString, about):
         """
-        Inserts a new jam into the database
+        Updates values of the jam corresponding to jam_id in the database
         """
 
         startDate = startDateString.replace("T"," ") + ":00"
@@ -399,6 +399,29 @@ UPDATE GameJams
 		Description = %s
 	WHERE id = %s"""
         data = (name, theme, startDate, endDate, about, jam_id)
+
+        mycursor.execute(expression, data)
+        mycursor.close()
+        self.mydb.commit()
+    
+    def UpdateUser(self, user_id, first_name, last_name, about, primary_spec, secondary_spec, experience):
+        """
+        Updates values of the user corresponding to user_id in the database
+        """
+
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+
+        expression = """
+UPDATE Users 
+	SET Name = %s,
+        ProfileSummary = %s,
+        PrimarySpecialization = %s,
+        SecondarySpecializations = %s,
+        Experience = %s
+	WHERE id = %s"""
+
+        data = (first_name + ' ' + last_name, about, primary_spec, secondary_spec, experience, user_id)
 
         mycursor.execute(expression, data)
         mycursor.close()

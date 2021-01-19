@@ -6,7 +6,9 @@ class User:
         self.email = row[1]
         self.name = row[2]
         self.about = row[3]
+        self.primary_spec_raw = int(row[4])
         self.primary_spec = getRoles()[int(row[4])]
+        self.secondary_specs_raw = int(row[5])
         self.secondary_specs = decodeSpecs(int(row[5]))
         self.experience = row[6]
     
