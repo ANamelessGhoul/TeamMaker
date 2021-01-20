@@ -15,5 +15,12 @@ def decodeSpecs(specs):
             decoded.append(specNames[i])
     return decoded
 
+def decodeRoles(specs):
+    decoded = []
+    for i in range(len(specNames)):
+        if specsContains(specs, i):
+            decoded.append(roleNames[i])
+    return decoded
+
 def specsContains (specs, spec):
     return (specs & (1 << spec)) != 0

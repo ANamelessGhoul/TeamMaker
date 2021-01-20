@@ -5,7 +5,7 @@ import bcrypt
 from datetime import datetime
 
 from database import Database
-from specs import getRoles, getSpecializations, specsContains
+from specs import getRoles, getSpecializations, specsContains, decodeRoles
 
 def home_page():
     return render_template("home.html")
@@ -191,6 +191,21 @@ def validate_newjam_form(form):
 
     return len(form.errors) == 0
 
+def teams_page(jam_id):
+    teams = Database.getInstance().GetTeams(jam_id)
+    return render_template('teams.html', teams=teams, jam_id=jam_id)
+
+def viewteam_page(team_id):
+    if request.method == "GET":
+        team = Database.getInstance().GetTeam(team_id)
+        if team is None:
+            abort(404)
+        team.roles = decodeRoles(team.looking_for)
+        return render_template('team_info.html', team=team, moderator=team.leader_id == current_user.data.id)
+    else:
+        if request.form.get('delete', None) is not None:
+            Database.getInstance().DeleteTeam(team_id)
+            return redirect(url_for("home_page"))
 
 @login_required
 def editteam_page(jam_id, team_id):
@@ -227,15 +242,14 @@ def editteam_page(jam_id, team_id):
         )
         data = request.form.data
 
-        team_id = Database.getInstance().UpdateTeam(
+        Database.getInstance().UpdateTeam(
             name = data['name'],
             about = data['about'],
             specs = data['specs'],
             team_id = team_id
         )
         
-        #TODO: redirect to team page
-        return redirect(url_for("newteam_page", jam_id=jam_id))
+        return redirect(url_for("viewteam_page", team_id=team_id))
 
 @login_required
 def newteam_page(jam_id):
@@ -278,8 +292,7 @@ def newteam_page(jam_id):
         user_id = current_user.get_id()
         db.JoinChatroom(user_id=user_id, chat_id=chat_id)
         db.JoinTeam(user_id=user_id, team_id=team_id)
-        #TODO: redirect to team page
-        return redirect(url_for("newteam_page", jam_id=jam_id))
+        return redirect(url_for("viewteam_page", team_id=team_id))
 
 def validate_newteam_form(form, options):
     form.data = {}

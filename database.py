@@ -256,7 +256,7 @@ AND User_id != %s;
 
     def GetTeam(self, team_id):
         """
-        Returns game team with id from database
+        Returns team with id from database
         """
         self.mydb.commit()
         mycursor = self.mydb.cursor()
@@ -269,6 +269,25 @@ AND User_id != %s;
             return models.Team(team)
         else:
             return None
+    
+    def GetTeams(self, jam_id):
+        """
+        Returns a list of teams from jam with id from database
+        """
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+        expression = "SELECT * FROM Teams WHERE Jam_id = %s;"
+        mycursor.execute(expression, (jam_id,))
+        
+        teams = []
+        row = mycursor.fetchone()
+        while row is not None:
+            team = models.Team(row)
+            teams.append(team)
+            row = mycursor.fetchone()
+        
+        mycursor.close()
+        return teams
 
     ### Database Insertions
 
@@ -411,12 +430,24 @@ AND User_id != %s;
 
     def DeleteGameJam(self, jam_id):
         """
-        Deletes user and all corresponding data from database
+        Deletes jam and all corresponding data from database
         """
         self.mydb.commit()
         mycursor = self.mydb.cursor()
 
         mycursor.execute("DELETE FROM GameJams WHERE id = %s;",(jam_id,))
+        
+        mycursor.close()
+        self.mydb.commit()
+    
+    def DeleteTeam(self, team_id):
+        """
+        Deletes team and all corresponding data from database
+        """
+        self.mydb.commit()
+        mycursor = self.mydb.cursor()
+
+        mycursor.execute("DELETE FROM Teams WHERE id = %s;",(team_id,))
         
         mycursor.close()
         self.mydb.commit()

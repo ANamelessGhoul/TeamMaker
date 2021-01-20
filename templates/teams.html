@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% import "macros.html" as macros %}
+{% block title %} Teams {% endblock %}
+{% block content %} 
+    <div class="columns is-centered">
+        <div class="column is-4">
+            <div class="container is-fluid" style="text-align: center">
+                <h1 class="title">Teams</h1>
+            </div>
+            <div class="content is-clearfix" style="height:60vh; overflow-y:auto">
+                {% for team in teams %}
+                <a class="button" href = "{{ url_for('viewteam_page', team_id=team.id) }}"> {{ team.name }} </a>
+                {% endfor %}
+            </div>
+            <div class="control">
+                <a class="button is-primary" href = "{{ url_for('newteam_page', jam_id=jam_id) }}"> Create Team </a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

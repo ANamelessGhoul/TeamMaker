@@ -34,8 +34,9 @@ class Team:
         self.name = row[1]
         self.about = row[2]
         self.looking_for = row[3]
-        self.leader_id = row[4]
-        self.chat_id = row[5]
+        self.leader_id = int(row[4])
+        self.jam_id = int(row[5])
+        self.chat_id = int(row[6])
 
 
 class ChatRoom:

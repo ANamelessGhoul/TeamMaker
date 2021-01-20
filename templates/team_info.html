@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block title %} {{ team.name|title }} {% endblock %}
+{% block content %} 
+    <div class="columns is-centered">
+        <div class="column is-6">
+            <div class="card">
+                <div class="card-content">
+                    <p class="title is-2"> {{ team.name }}</p>
+                    <p class="content"> 
+                        Looking for: {% for spec in team.roles %}
+                        {{ spec }}{% if spec == team.roles[-2] %} and {% elif spec != team.roles[-1] %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <p class="subtitle is-4"> About:</p>
+                    <p class="content"> &emsp;{{team.about}}</p>
+
+                    <p class="subtitle is-4"> Moderators:</p>
+                    {# <ul>
+                    {% for user in attending if user.moderator == 1 %}
+                    <li> <a class="content" href={{ url_for('profile_page', user_id = user.id)}}> {{ user.name }}</a> </li>
+                    {% endfor %}
+                    </ul> #}
+
+
+
+                    {# {% if now < jam.endDate %}
+                    <div class="content">
+                        {% if current_user_attending == None %}
+                        <form action="" method="post">
+                            <input class="button is-primary"  type="submit" name="join" value="Join Jam"/>
+                        </form>
+                        {% else %}
+                        <input class="button is-disabled" value="Already Joined"/>
+                        {% endif %}
+                    </div>
+                    {% endif %} #}
+
+                    {# <p class="subtitle is-4"> {{ attending|length }} users attending:</p>
+                    <ul>
+                    {% for user in attending %}
+                    <li> <a class="content" href={{ url_for('profile_page', user_id = user.id)}}> {{ user.name }}</a> </li>
+                    {% endfor %}
+                    </ul> #}
+
+                </div>
+                {% if moderator %}
+                <div class="card-content">
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <a class="button is-info" href="{{ url_for('editteam_page', jam_id = team.jam_id, team_id = team.id) }}">Edit Info</a>
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control ">
+                            <form action="" method="post" name="jam"> 
+                                <button name="delete" class="button is-danger" value="delete">Cancel & Delete Team</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+        
+    </div>
+
+{% endblock %}

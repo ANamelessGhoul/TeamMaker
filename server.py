@@ -34,9 +34,10 @@ def create_app():
     app.add_url_rule("/editjam/<int:jam_id>", view_func = view.editjam_page, methods=["GET", "POST"])
     app.add_url_rule("/myjams", view_func = view.myjams_page)
 
+    app.add_url_rule("/teams/<int:jam_id>", view_func = view.teams_page, methods=["GET"])
     app.add_url_rule("/newteam/<int:jam_id>", view_func = view.newteam_page, methods=["GET", "POST"])
     app.add_url_rule("/editteam/<int:jam_id>/<int:team_id>", view_func = view.editteam_page, methods=["GET", "POST"])
-    app.add_url_rule("/viewteam/<int:team_id>", view_func = view.newteam_page, methods=["GET", "POST"])
+    app.add_url_rule("/viewteam/<int:team_id>", view_func = view.viewteam_page, methods=["GET", "POST"])
 
     app.add_url_rule("/profile/<int:user_id>", view_func = view.profile_page)
     app.add_url_rule("/myprofile", view_func = view.my_profile_page, methods=["GET", "POST"])

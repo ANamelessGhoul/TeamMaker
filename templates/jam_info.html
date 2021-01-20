@@ -25,12 +25,17 @@
                     {% if now < jam.endDate %}
                     <div class="content">
                         {% if current_user_attending == None %}
-                        <form action="" method="post">
-                            <input class="button is-primary"  type="submit" name="join" value="Join Jam"/>
-                        </form>
+                        <div class="field is-grouped">
+                            <form action="" method="post">
+                                <input class="button is-primary"  type="submit" name="join" value="Join Jam"/>
+                            </form>
+                        </div>
                         {% else %}
-                        <input class="button is-disabled" value="Already Joined"/>
+                        <div class="field is-grouped">
+                            <a class="button is-info" href="{{ url_for('teams_page', jam_id=jam.id) }}"> Show/Create Teams </a>
+                        </div>
                         {% endif %}
+                        
                     </div>
                     {% endif %}
 
